@@ -2,7 +2,7 @@ import { PhotosResponse } from "../types/photos-response";
 import { unsplash } from "./unsplash";
 
 export const getFeed = async (page: number) => {
-  const result = await unsplash.photos.list({ perPage: 15, page: page });
+  const result = await unsplash.photos.list({ perPage: 9, page: page });
 
   if (result.type === "error") {
     return {

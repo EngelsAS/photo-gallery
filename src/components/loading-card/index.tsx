@@ -1,19 +1,19 @@
 import { forwardRef } from "react";
 
-interface LoadingCardProps {
+interface IntersectionDivProps {
   height?: number;
 }
 
-const LoadingCard = forwardRef<HTMLDivElement, LoadingCardProps>(
+const IntersectionDiv = forwardRef<HTMLDivElement, IntersectionDivProps>(
   ({ height = 288 }, ref) => {
     return (
       <div
         ref={ref}
-        className="animate-pulse bg-gray-300 w-full"
+        className="w-full h-10"
         style={{ height: height + "px" }}
       ></div>
     );
   }
 );
 
-export default LoadingCard;
+export default IntersectionDiv;
