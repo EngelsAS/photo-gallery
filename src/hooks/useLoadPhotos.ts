@@ -21,7 +21,7 @@ const useLoadPhotos = (props: useLoadPhotosProps) => {
 
   const feedPage = useRef<number>(1);
 
-  const loadingRefs = useRef<HTMLDivElement[]>([]);
+  const loadingRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetchFeed();
@@ -40,6 +40,10 @@ const useLoadPhotos = (props: useLoadPhotosProps) => {
   };
 
   useEffect(() => {
+    console.log(photoColumns);
+  }, [photoColumns]);
+
+  useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (
@@ -54,10 +58,8 @@ const useLoadPhotos = (props: useLoadPhotosProps) => {
       }
     );
 
-    if (loadingRefs.current.length > 0) {
-      loadingRefs.current.forEach((ref) => {
-        observer.observe(ref);
-      });
+    if (loadingRef.current) {
+      observer.observe(loadingRef.current);
     }
 
     return () => observer.disconnect();
@@ -90,7 +92,7 @@ const useLoadPhotos = (props: useLoadPhotosProps) => {
   return {
     photoColumns,
     error,
-    loadingRefs,
+    loadingRef,
   };
 };
 
