@@ -18,6 +18,7 @@ const useLoadPhotos = (props: useLoadPhotosProps) => {
   const [photoColumns, setPhotoColumns] = useState<Basic[][]>([]);
   const [error, setError] = useState<string | null>(null);
   const isFetchingData = useRef(false);
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
   const feedPage = useRef<number>(1);
 
@@ -44,25 +45,32 @@ const useLoadPhotos = (props: useLoadPhotosProps) => {
   }, [photoColumns]);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (
-          entries.some((entry) => entry.isIntersecting) &&
-          !isFetchingData.current
-        ) {
-          fetchFeed();
-        }
-      },
-      {
-        rootMargin: "50%",
-      }
-    );
+    if (!loadingRef.current) return;
 
-    if (loadingRef.current) {
-      observer.observe(loadingRef.current);
+    if (!observerRef.current) {
+      observerRef.current = new IntersectionObserver(
+        (entries) => {
+          if (
+            entries.some((entry) => entry.isIntersecting) &&
+            !isFetchingData.current
+          ) {
+            fetchFeed();
+          }
+        },
+        {
+          rootMargin: "50%",
+        }
+      );
     }
 
-    return () => observer.disconnect();
+    if (loadingRef.current && observerRef.current) {
+      observerRef.current.observe(loadingRef.current);
+    }
+
+    if (observerRef.current) {
+      const observer = observerRef.current;
+      return () => observer.disconnect();
+    }
 
     //eslint-disable-next-line
   }, [photoColumns]);
