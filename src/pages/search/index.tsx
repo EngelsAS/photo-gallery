@@ -1,21 +1,31 @@
 import { useParams } from "react-router";
 import PhotoList from "../../components/photo-list";
 import useLoadPhotos from "../../hooks/useLoadPhotos";
+import IntersectionDiv from "../../components/loading-card";
+import { capitalizeFirstLetter } from "../../utils/capitalize-first-letter";
 
 const Search = () => {
   const { query } = useParams();
-  const { photoColumns: queryResults, loadingRefs } = useLoadPhotos({
+  const { photoColumns: queryResults, loadingRef } = useLoadPhotos({
     type: "query",
     query: query || "",
   });
 
   return (
-    <div className="max-w-7xl mx-auto my-10 flex flex-col gap-3">
-      <p className="font-semibold text-3xl uppercase ">{query}</p>
-      <div className="max-w-7xl mx-auto my-10 flex gap-3">
-        <PhotoList columns={queryResults} loadingRefs={loadingRefs} />
+    <>
+      <div>
+        <div className="max-w-7xl mx-auto my-10 font-bold text-3xl">
+          <h2>{capitalizeFirstLetter(query || "")}</h2>
+        </div>
+        <div className="max-w-7xl mx-auto my-10 flex gap-3">
+          <PhotoList columns={queryResults} />
+        </div>
+        <IntersectionDiv
+          ref={loadingRef}
+          height={Math.ceil(Math.random() * (576 - 288) + 288)}
+        />
       </div>
-    </div>
+    </>
   );
 };
 
