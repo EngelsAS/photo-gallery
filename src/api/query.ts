@@ -9,6 +9,8 @@ export const getQuery = async (query: string, page: number) => {
     orderBy: "relevant",
   });
 
+  console.log(result);
+
   if (result.type === "error") {
     return {
       type: "error",

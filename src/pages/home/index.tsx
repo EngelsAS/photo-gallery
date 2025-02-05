@@ -3,7 +3,7 @@ import PhotoList from "../../components/photo-list";
 import useLoadPhotos from "../../hooks/useLoadPhotos";
 
 const Home = () => {
-  const { photoColumns, loadingRef } = useLoadPhotos({ type: "feed" });
+  const { photoColumns, loadingRef } = useLoadPhotos({});
 
   return (
     <>

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Blurhash } from "react-blurhash";
+import { Link } from "react-router";
 import { Basic } from "unsplash-js/dist/methods/photos/types";
 
 const Photo = ({ data }: { data: Basic }) => {
@@ -41,53 +42,55 @@ const Photo = ({ data }: { data: Basic }) => {
   }, []);
 
   return (
-    <div
-      className="w-full relative cursor-zoom-in"
-      ref={divRef}
-      style={{ height: blurHeight }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
+    <Link to={`/photo/${data.id}`}>
       <div
-        className={`w-full h-full absolute ${!isLoaded ? "block" : "hidden"}`}
+        className="w-full relative cursor-zoom-in"
+        ref={divRef}
+        style={{ height: blurHeight }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
       >
-        <Blurhash
-          hash={data.blur_hash || ""}
-          width="100%"
-          height="100%"
-          resolutionX={32}
-          resolutionY={32}
-          punch={1}
+        <div
+          className={`w-full h-full absolute ${!isLoaded ? "block" : "hidden"}`}
+        >
+          <Blurhash
+            hash={data.blur_hash || ""}
+            width="100%"
+            height="100%"
+            resolutionX={32}
+            resolutionY={32}
+            punch={1}
+          />
+        </div>
+
+        {isLoaded && (
+          <div>
+            <div
+              className={`z-10 absolute w-full h-full bg-stone-950 transition-opacity ${
+                isHovered ? "opacity-35" : "opacity-0"
+              }`}
+            ></div>
+            <div
+              className={`z-20 absolute flex bottom-0 p-3 items-center gap-3 transition-opacity cursor-pointer ${
+                isHovered ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              <img
+                src={data.user.profile_image.medium}
+                className="w-10 h-10 rounded-full"
+              ></img>
+              <p className="font-semibold text-white opacity-75 hover:opacity-100 transition-opacity">
+                {data.user.name}
+              </p>
+            </div>
+          </div>
+        )}
+        <img
+          className={`w-full object-contain ${isLoaded ? "block" : "hidden"}`}
+          src={data.urls.small}
         />
       </div>
-
-      {isLoaded && (
-        <div>
-          <div
-            className={`z-10 absolute w-full h-full bg-stone-950 transition-opacity ${
-              isHovered ? "opacity-35" : "opacity-0"
-            }`}
-          ></div>
-          <div
-            className={`z-20 absolute flex bottom-0 p-3 items-center gap-3 transition-opacity cursor-pointer ${
-              isHovered ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            <img
-              src={data.user.profile_image.medium}
-              className="w-10 h-10 rounded-full"
-            ></img>
-            <p className="font-semibold text-white opacity-75 hover:opacity-100 transition-opacity">
-              {data.user.name}
-            </p>
-          </div>
-        </div>
-      )}
-      <img
-        className={`w-full object-contain ${isLoaded ? "block" : "hidden"}`}
-        src={data.urls.small}
-      />
-    </div>
+    </Link>
   );
 };
 

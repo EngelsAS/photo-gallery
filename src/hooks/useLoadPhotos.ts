@@ -5,19 +5,15 @@ import { getFeed } from "../api/getFeed";
 import { getQuery } from "../api/query";
 import { PhotosResponse } from "../types/photos-response";
 
-type useLoadPhotosProps =
-  | {
-      type: "feed";
-    }
-  | {
-      type: "query";
-      query: string;
-    };
+type useLoadPhotosProps = {
+  query?: string;
+};
 
-const useLoadPhotos = (props: useLoadPhotosProps) => {
+const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
   const [photoColumns, setPhotoColumns] = useState<Basic[][]>([]);
+  const [isFetchingData, setIsFetchingData] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const isFetchingData = useRef(false);
+  const isFirstLoad = useRef(true);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   const feedPage = useRef<number>(1);
@@ -25,10 +21,9 @@ const useLoadPhotos = (props: useLoadPhotosProps) => {
   const loadingRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    fetchFeed();
-
-    //eslint-disable-next-line
-  }, []);
+    feedPage.current = 1;
+    setPhotoColumns([]);
+  }, [query]);
 
   const addNewPhotosOnList = (newItems: Basic[][]) => {
     if (photoColumns.length === 0) {
@@ -41,21 +36,33 @@ const useLoadPhotos = (props: useLoadPhotosProps) => {
   };
 
   useEffect(() => {
-    console.log(photoColumns);
+    if (photoColumns.length > 0) {
+      setIsFetchingData(false);
+    }
   }, [photoColumns]);
 
   useEffect(() => {
-    if (observerRef.current) {
-      observerRef.current.disconnect();
-    }
+    console.log(isFetchingData);
+  }, [isFetchingData]);
 
+  useEffect(() => {
+    if (isFetchingData) {
+      if (isFirstLoad.current) {
+        isFirstLoad.current = false;
+      }
+      console.log("CHAMA É PRA CHAMAR CHAMA");
+      fetchFeed();
+    } else if (!isFirstLoad.current) {
+      feedPage.current += 1;
+    }
+    //eslint-disable-next-line
+  }, [isFetchingData]);
+
+  useEffect(() => {
     observerRef.current = new IntersectionObserver(
       (entries) => {
-        if (
-          entries.some((entry) => entry.isIntersecting) &&
-          !isFetchingData.current
-        ) {
-          fetchFeed();
+        if (entries.some((entry) => entry.isIntersecting) && !isFetchingData) {
+          setIsFetchingData(true);
         }
       },
       {
@@ -73,28 +80,23 @@ const useLoadPhotos = (props: useLoadPhotosProps) => {
     }
 
     //eslint-disable-next-line
-  }, [photoColumns]);
+  }, []);
 
   const fetchFeed = async () => {
-    isFetchingData.current = true;
-    console.log("\n\n tem um fiddle nos cabos");
     let result: PhotosResponse;
 
-    if (props.type === "feed") {
+    if (!query) {
       result = await getFeed(feedPage.current);
     } else {
-      result = await getQuery(props.query, feedPage.current);
+      result = await getQuery(query, feedPage.current);
     }
 
-    if (result.error) {
-      setError(result.error);
-    } else if (result.photos) {
+    if (result.photos) {
       const splitedPhotos = divideArrayInThree(result.photos);
       addNewPhotosOnList(splitedPhotos);
+    } else if (result.error) {
+      setError(result.error);
     }
-
-    feedPage.current += 1;
-    isFetchingData.current = false;
   };
 
   return {
