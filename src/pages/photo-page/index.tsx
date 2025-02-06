@@ -17,6 +17,7 @@ const PhotoPage = () => {
     publicationData || ""
   );
   const divRef = useRef<HTMLDivElement>(null);
+  const [isLoadingDownload, setIsLoadingDownload] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
 
   useEffect(() => {
@@ -52,6 +53,8 @@ const PhotoPage = () => {
   const handleDownload = async () => {
     if (!photoInfos) return;
 
+    setIsLoadingDownload(true);
+
     const resp = await unsplash.photos.trackDownload({
       downloadLocation: photoInfos.links.download_location,
     });
@@ -70,6 +73,8 @@ const PhotoPage = () => {
         document.body.removeChild(link);
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoadingDownload(false);
       }
     }
   };
@@ -99,7 +104,11 @@ const PhotoPage = () => {
 
         <div
           onClick={handleDownload}
-          className="rounded-md border p-1 border-zinc-200 cursor-pointer hover:border-black text-zinc-400 hover:text-black shadow"
+          className={`rounded-md border p-1 border-zinc-200 cursor-pointer hover:border-black text-zinc-400 hover:text-black shadow ${
+            isLoadingDownload
+              ? "animate-pulse pointer-events-none bg-stone-200"
+              : ""
+          }`}
         >
           <ArrowDownTrayIcon className="size-7" />
         </div>
