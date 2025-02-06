@@ -17,7 +17,6 @@ const SearchInput = () => {
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    console.log(e.code === "Enter");
     if (e.code === "Enter") {
       navigate(`/search/${inputValue}`);
     }

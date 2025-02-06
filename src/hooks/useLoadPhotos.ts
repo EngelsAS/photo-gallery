@@ -42,15 +42,10 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
   }, [photoColumns]);
 
   useEffect(() => {
-    console.log(isFetchingData);
-  }, [isFetchingData]);
-
-  useEffect(() => {
     if (isFetchingData) {
       if (isFirstLoad.current) {
         isFirstLoad.current = false;
       }
-      console.log("CHAMA É PRA CHAMAR CHAMA");
       fetchFeed();
     } else if (!isFirstLoad.current) {
       feedPage.current += 1;
