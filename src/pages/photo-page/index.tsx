@@ -76,7 +76,7 @@ const PhotoPage = () => {
               onClick={() => {
                 setIsFullScreen(true);
               }}
-              className="h-full w-full"
+              className="h-full w-full pointer-events-none md:pointer-events-auto"
             >
               <Photo
                 data={photoInfos}
@@ -91,15 +91,18 @@ const PhotoPage = () => {
 
       {photoInfos && (
         <div
-          className={`absolute h-screen top-0 left-0 right-0 ${
+          className={`absolute h-screen flex items-center top-0 left-0 right-0 cursor-zoom-out ${
             !isFullScreen ? "pointer-events-none opacity-0 overflow-hidden" : ""
           }`}
           onClick={() => setIsFullScreen(false)}
         >
+          <div className="fixed text-white h-screen bg-black/45 w-screen"></div>
+
           <Photo
             data={photoInfos}
             imageSrc={photoInfos?.urls.full}
             gradualLoading={true}
+            isFullScreen={isFullScreen}
           />
         </div>
       )}

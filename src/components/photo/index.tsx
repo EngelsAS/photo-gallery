@@ -9,6 +9,7 @@ interface PhotoProps {
   imageHeight?: `${number}px` | `${number}%` | number;
   imageWidth?: `${number}px` | `${number}%` | number;
   gradualLoading?: boolean;
+  isFullScreen?: boolean;
 }
 
 const Photo = ({
@@ -18,6 +19,7 @@ const Photo = ({
   imageWidth,
   children,
   gradualLoading,
+  isFullScreen,
 }: PhotoProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [blurHeight, setBlurHeight] = useState(0);
@@ -75,7 +77,9 @@ const Photo = ({
 
   return (
     <div
-      className="w-full relative cursor-zoom-in"
+      className={`w-full relative ${
+        isFullScreen ? "cursor-zoom-out" : "cursor-zoom-in"
+      }`}
       ref={divRef}
       style={{
         height: imageHeight ? imageHeight : blurHeight,
