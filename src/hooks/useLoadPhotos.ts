@@ -29,9 +29,21 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
     if (photoColumns.length === 0) {
       setPhotoColumns(newItems);
     } else {
-      setPhotoColumns((prev) =>
-        prev.map((array, index) => [...array, ...newItems[index]])
-      );
+      const distributedList = JSON.parse(
+        JSON.stringify(photoColumns)
+      ) as Basic[][];
+      newItems.flat().forEach((item) => {
+        let minLengthColumIndex = 0;
+        const columnsLength = distributedList.map((column, index) => ({
+          index: index,
+          length: column.length,
+        }));
+        columnsLength.sort((a, b) => a.length - b.length);
+        minLengthColumIndex = columnsLength[0].index;
+        distributedList[minLengthColumIndex].push(item);
+      });
+      console.log(distributedList);
+      setPhotoColumns(distributedList);
     }
   };
 
@@ -61,7 +73,7 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
         }
       },
       {
-        rootMargin: "50%",
+        rootMargin: "200%",
       }
     );
 
