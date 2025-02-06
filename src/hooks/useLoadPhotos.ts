@@ -42,7 +42,6 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
         minLengthColumIndex = columnsLength[0].index;
         distributedList[minLengthColumIndex].push(item);
       });
-      console.log(distributedList);
       setPhotoColumns(distributedList);
     }
   };

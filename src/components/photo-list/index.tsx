@@ -22,8 +22,6 @@ const PhotoList = ({ columns, observerFunction }: PhotoListProps) => {
   const createObserver = (element: HTMLDivElement) => {
     if (!element || !observerFunction) return;
 
-    console.log(element);
-
     observerRef.current = new IntersectionObserver(
       (entries) => {
         if (entries.some((entry) => entry.isIntersecting)) {
