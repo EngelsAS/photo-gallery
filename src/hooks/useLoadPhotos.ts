@@ -73,7 +73,7 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
         }
       },
       {
-        rootMargin: "200%",
+        rootMargin: "50%",
       }
     );
 
