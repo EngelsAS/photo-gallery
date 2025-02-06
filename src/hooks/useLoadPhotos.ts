@@ -87,6 +87,9 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
     }
 
     if (result.photos) {
+      if (feedPage.current > 1) {
+        result.photos.shift();
+      }
       const splitedPhotos = divideArrayInThree(result.photos);
       addNewPhotosOnList(splitedPhotos);
     } else if (result.error) {
