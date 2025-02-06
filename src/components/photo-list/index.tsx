@@ -12,7 +12,7 @@ const PhotoList = ({ columns }: PhotoListProps) => {
 
   const content = columns.map((internArray, indexMainArray) => (
     <div
-      className={`flex flex-col w-full gap-3 max-w-[418px]`}
+      className={`flex flex-col w-full gap-3 md:max-w-[418px]`}
       key={indexMainArray}
     >
       {internArray.map((item, internArrayIndex) => (

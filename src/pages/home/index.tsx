@@ -7,7 +7,7 @@ const Home = () => {
 
   return (
     <>
-      <div className="max-w-7xl mx-auto my-10 flex gap-3">
+      <div className="max-w-7xl mx-auto my-10 flex gap-3 flex-wrap md:flex-nowrap">
         <PhotoList columns={photoColumns} />
       </div>
       <IntersectionDiv
