@@ -1,3 +1,7 @@
+import {
+  ArrowsPointingInIcon,
+  ArrowsPointingOutIcon,
+} from "@heroicons/react/24/outline";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { Blurhash } from "react-blurhash";
 import { Basic } from "unsplash-js/dist/methods/photos/types";
@@ -10,6 +14,7 @@ interface PhotoProps {
   imageWidth?: `${number}px` | `${number}%` | number;
   gradualLoading?: boolean;
   isFullScreen?: boolean;
+  expandable?: boolean;
 }
 
 const Photo = ({
@@ -20,6 +25,7 @@ const Photo = ({
   children,
   gradualLoading,
   isFullScreen,
+  expandable,
 }: PhotoProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [blurHeight, setBlurHeight] = useState(0);
@@ -86,6 +92,16 @@ const Photo = ({
         width: imageWidth ? (isLoaded ? undefined : imageWidth) : undefined,
       }}
     >
+      {expandable && (
+        <div className="absolute p-3 h-full w-full flex justify-end opacity-0 hover:opacity-100 transition-opacity">
+          {!isFullScreen ? (
+            <ArrowsPointingOutIcon className="size-7 text-white" />
+          ) : (
+            <ArrowsPointingInIcon className="size-7 text-white" />
+          )}
+        </div>
+      )}
+
       <div
         className={`w-full h-full absolute ${
           !isLoaded && gradualImagesUrls.length === 0 ? "block" : "hidden"
