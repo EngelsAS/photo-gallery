@@ -65,15 +65,21 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
     //eslint-disable-next-line
   }, [isFetchingData]);
 
+  const handleObserver = () => {
+    if (!isFetchingData) {
+      setIsFetchingData(true);
+    }
+  };
+
   useEffect(() => {
     observerRef.current = new IntersectionObserver(
       (entries) => {
-        if (entries.some((entry) => entry.isIntersecting) && !isFetchingData) {
-          setIsFetchingData(true);
+        if (entries.some((entry) => entry.isIntersecting)) {
+          handleObserver();
         }
       },
       {
-        rootMargin: "50%",
+        rootMargin: "10%",
       }
     );
 
@@ -113,6 +119,7 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
     photoColumns,
     error,
     loadingRef,
+    handleObserver,
   };
 };
 

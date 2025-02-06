@@ -6,7 +6,11 @@ import { capitalizeFirstLetter } from "../../utils/capitalize-first-letter";
 
 const Search = () => {
   const { query } = useParams();
-  const { photoColumns: columns, loadingRef } = useLoadPhotos({
+  const {
+    photoColumns: columns,
+    loadingRef,
+    handleObserver,
+  } = useLoadPhotos({
     query: query || "",
   });
 
@@ -17,7 +21,7 @@ const Search = () => {
           <h2>{capitalizeFirstLetter(query || "")}</h2>
         </div>
         <div className="max-w-7xl mx-auto my-10 flex gap-3">
-          <PhotoList columns={columns} />
+          <PhotoList columns={columns} observerFunction={handleObserver} />
         </div>
         <IntersectionDiv
           ref={loadingRef}
