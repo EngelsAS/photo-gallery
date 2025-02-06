@@ -8,6 +8,7 @@ interface PhotoProps {
   children?: ReactNode;
   imageHeight?: `${number}px` | `${number}%` | number;
   imageWidth?: `${number}px` | `${number}%` | number;
+  gradualLoading?: boolean;
 }
 
 const Photo = ({
@@ -16,9 +17,11 @@ const Photo = ({
   imageHeight,
   imageWidth,
   children,
+  gradualLoading,
 }: PhotoProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [blurHeight, setBlurHeight] = useState(0);
+  const [gradualImagesUrls, setGradualImagesUrls] = useState<string[]>([]);
   const divRef = useRef<HTMLDivElement>(null);
 
   const handleResizeDiv = () => {
@@ -38,6 +41,23 @@ const Photo = ({
 
     img.src = imageSrc;
   }, [imageSrc]);
+
+  useEffect(() => {
+    if (gradualLoading && data && imageSrc) {
+      const urls = Object.values(data.urls);
+      const imageSources = urls.filter((item) => item !== imageSrc);
+
+      for (const src of imageSources) {
+        const img = new Image();
+
+        img.onload = () => {
+          setGradualImagesUrls((prev) => [...prev, src]);
+        };
+
+        img.src = src;
+      }
+    }
+  }, [gradualLoading, data, imageSrc]);
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver(handleResizeDiv);
@@ -63,7 +83,9 @@ const Photo = ({
       }}
     >
       <div
-        className={`w-full h-full absolute ${!isLoaded ? "block" : "hidden"}`}
+        className={`w-full h-full absolute ${
+          !isLoaded && gradualImagesUrls.length === 0 ? "block" : "hidden"
+        }`}
       >
         <Blurhash
           hash={data.blur_hash || ""}
@@ -81,6 +103,15 @@ const Photo = ({
         }`}
         src={imageSrc}
       />
+
+      {gradualLoading && (
+        <img
+          className={`w-full h-full object-contain ${
+            !isLoaded && gradualImagesUrls.length > 0 ? "block" : "hidden"
+          }`}
+          src={gradualImagesUrls[gradualImagesUrls.length - 1]}
+        />
+      )}
 
       {isLoaded && <>{children}</>}
     </div>

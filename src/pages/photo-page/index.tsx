@@ -40,10 +40,10 @@ const PhotoPage = () => {
 
   useEffect(() => {
     if (photoInfos && divRef.current) {
-      console.log("po mas ta vindo aqui");
-      const height = divRef.current?.offsetHeight;
-      const newWidth = (photoInfos?.width / photoInfos?.height) * height;
-      setImageWidth(newWidth);
+      const divMaxWidth = divRef.current.offsetWidth;
+      const height = divRef.current.offsetHeight;
+      const newWidth = (photoInfos.width / photoInfos.height) * height;
+      setImageWidth(newWidth <= divMaxWidth ? newWidth : divMaxWidth);
     }
   }, [photoInfos]);
 
@@ -69,14 +69,14 @@ const PhotoPage = () => {
         )}
       </div>
 
-      <div className="w-full flex">
-        <div className="h-[580px] mx-auto" ref={divRef}>
+      <div className="w-full flex" ref={divRef}>
+        <div className="h-[580px] mx-auto max-w-full">
           {photoInfos && (
             <div
               onClick={() => {
                 setIsFullScreen(true);
               }}
-              className="h-full"
+              className="h-full w-full"
             >
               <Photo
                 data={photoInfos}
@@ -96,7 +96,11 @@ const PhotoPage = () => {
           }`}
           onClick={() => setIsFullScreen(false)}
         >
-          <Photo data={photoInfos} imageSrc={photoInfos?.urls.full} />
+          <Photo
+            data={photoInfos}
+            imageSrc={photoInfos?.urls.full}
+            gradualLoading={true}
+          />
         </div>
       )}
     </div>
