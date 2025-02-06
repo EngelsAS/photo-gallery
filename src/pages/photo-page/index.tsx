@@ -59,7 +59,7 @@ const PhotoPage = () => {
         )}
       </div>
 
-      <div className="w-full border-2">
+      <div className="w-full">
         <div className="h-[580px] mx-auto" ref={divRef}>
           {photoInfos && (
             <div
@@ -68,7 +68,11 @@ const PhotoPage = () => {
               }}
               className="h-full"
             >
-              <Photo data={photoInfos} imageSrc={photoInfos.urls.regular} />
+              <Photo
+                data={photoInfos}
+                imageSrc={photoInfos.urls.regular}
+                imageHeight="100%"
+              />
             </div>
           )}
         </div>
@@ -76,7 +80,7 @@ const PhotoPage = () => {
 
       {photoInfos && (
         <div
-          className={`absolute h-screen top-0 bg-black left-0 right-0 ${
+          className={`absolute h-screen top-0 left-0 right-0 ${
             !isFullScreen ? "pointer-events-none opacity-0 overflow-hidden" : ""
           }`}
           onClick={() => setIsFullScreen(false)}
