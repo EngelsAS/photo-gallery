@@ -9,6 +9,7 @@ import { checkDaysSincePublication } from "../../utils/check-days-since-publicat
 const PhotoPage = () => {
   const { id } = useParams();
   const [photoInfos, setPhotoInfos] = useState<Full | undefined>();
+  const [imageWidth, setImageWidth] = useState(0);
   const publicationData = photoInfos?.created_at.split("T")[0];
   const daysPassesSincePublication = checkDaysSincePublication(
     publicationData || ""
@@ -37,6 +38,15 @@ const PhotoPage = () => {
     }
   };
 
+  useEffect(() => {
+    if (photoInfos && divRef.current) {
+      console.log("po mas ta vindo aqui");
+      const height = divRef.current?.offsetHeight;
+      const newWidth = (photoInfos?.width / photoInfos?.height) * height;
+      setImageWidth(newWidth);
+    }
+  }, [photoInfos]);
+
   return (
     <div className="p-3 flex flex-col gap-3">
       <div className="flex items-center gap-3">
@@ -59,7 +69,7 @@ const PhotoPage = () => {
         )}
       </div>
 
-      <div className="w-full">
+      <div className="w-full flex">
         <div className="h-[580px] mx-auto" ref={divRef}>
           {photoInfos && (
             <div
@@ -72,6 +82,7 @@ const PhotoPage = () => {
                 data={photoInfos}
                 imageSrc={photoInfos.urls.regular}
                 imageHeight="100%"
+                imageWidth={imageWidth}
               />
             </div>
           )}

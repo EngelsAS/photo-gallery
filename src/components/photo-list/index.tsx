@@ -12,12 +12,16 @@ const PhotoList = ({ columns }: PhotoListProps) => {
 
   const content = columns.map((internArray, indexMainArray) => (
     <div
-      className={`flex flex-col grow gap-3 max-w-[418px]`}
+      className={`flex flex-col w-full gap-3 max-w-[418px]`}
       key={indexMainArray}
     >
       {internArray.map((item, internArrayIndex) => (
-        <Link to={`/photo/${item.id}`} state={{ background: location }}>
-          <Photo key={internArrayIndex} data={item} imageSrc={item.urls.small}>
+        <Link
+          to={`/photo/${item.id}`}
+          key={internArrayIndex}
+          state={{ background: location }}
+        >
+          <Photo data={item} imageSrc={item.urls.small}>
             <PhotoUsernameHover
               profileImg={item.user.profile_image.medium}
               username={item.user.name}

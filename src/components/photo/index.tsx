@@ -6,10 +6,17 @@ interface PhotoProps {
   data: Basic;
   imageSrc: string;
   children?: ReactNode;
-  imageHeight?: `${number}px` | `${number}%`;
+  imageHeight?: `${number}px` | `${number}%` | number;
+  imageWidth?: `${number}px` | `${number}%` | number;
 }
 
-const Photo = ({ data, imageSrc, imageHeight, children }: PhotoProps) => {
+const Photo = ({
+  data,
+  imageSrc,
+  imageHeight,
+  imageWidth,
+  children,
+}: PhotoProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [blurHeight, setBlurHeight] = useState(0);
   const divRef = useRef<HTMLDivElement>(null);
@@ -46,15 +53,14 @@ const Photo = ({ data, imageSrc, imageHeight, children }: PhotoProps) => {
     //eslint-disable-next-line
   }, []);
 
-  useEffect(() => {
-    console.log(imageHeight);
-  }, [imageHeight]);
-
   return (
     <div
       className="w-full relative cursor-zoom-in"
       ref={divRef}
-      style={{ height: imageHeight ? imageHeight : blurHeight }}
+      style={{
+        height: imageHeight ? imageHeight : blurHeight,
+        width: imageWidth ? (isLoaded ? undefined : imageWidth) : undefined,
+      }}
     >
       <div
         className={`w-full h-full absolute ${!isLoaded ? "block" : "hidden"}`}
