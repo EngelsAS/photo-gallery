@@ -2,7 +2,7 @@ import { Basic } from "unsplash-js/dist/methods/photos/types";
 import Photo from "../photo";
 import { Link, useLocation } from "react-router";
 import PhotoUsernameHover from "../photo-username-hover";
-import { useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import useIsScreenXs from "../../hooks/useIsScreenXs";
 
 interface PhotoListProps {
@@ -13,6 +13,7 @@ interface PhotoListProps {
 const PhotoList = ({ columns, observerFunction }: PhotoListProps) => {
   const location = useLocation();
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const lastDivRef = useRef<HTMLDivElement | null>(null);
   const isXs = useIsScreenXs();
 
   useEffect(() => {
@@ -22,13 +23,24 @@ const PhotoList = ({ columns, observerFunction }: PhotoListProps) => {
   }, []);
 
   useEffect(() => {
+    console.log("aqui é no useEffect", isXs);
     if (isXs && observerRef.current) {
+      console.log("desativou o observer");
       observerRef.current.disconnect();
     }
+
+    if (!isXs && lastDivRef.current && observerFunction) {
+      console.log("chamou o observer");
+      observerFunction();
+    }
+
+    //eslint-disable-next-line
   }, [isXs]);
 
   const createObserver = (element: HTMLDivElement) => {
     if (!element || !observerFunction) return;
+
+    lastDivRef.current = element;
 
     observerRef.current = new IntersectionObserver(
       (entries) => {
@@ -52,12 +64,8 @@ const PhotoList = ({ columns, observerFunction }: PhotoListProps) => {
           key={indexMainArray}
         >
           {internArray.map((item, internArrayIndex) => (
-            <>
-              <Link
-                to={`/photo/${item.id}`}
-                key={internArrayIndex}
-                state={{ background: location }}
-              >
+            <Fragment key={internArrayIndex}>
+              <Link to={`/photo/${item.id}`} state={{ background: location }}>
                 <Photo data={item} imageSrc={item.urls.small}>
                   <PhotoUsernameHover
                     profileImg={item.user.profile_image.medium}
@@ -72,7 +80,7 @@ const PhotoList = ({ columns, observerFunction }: PhotoListProps) => {
                   )}
                 </>
               )}
-            </>
+            </Fragment>
           ))}
         </div>
       ))}
