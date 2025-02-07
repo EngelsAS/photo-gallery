@@ -104,10 +104,10 @@ const PhotoPage = () => {
 
         <div
           onClick={handleDownload}
-          className={`rounded-md border p-1 border-zinc-200 cursor-pointer hover:border-black text-zinc-400 hover:text-black shadow ${
+          className={`rounded-md border p-1 border-zinc-200 cursor-pointer hover:border-black  hover:text-black shadow transition-colors ${
             isLoadingDownload
-              ? "animate-pulse pointer-events-none bg-stone-200"
-              : ""
+              ? "animate-pulse pointer-events-none bg-stone-300 text-white"
+              : "text-zinc-400"
           }`}
         >
           <ArrowDownTrayIcon className="size-7" />
