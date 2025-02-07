@@ -3,6 +3,7 @@ import Photo from "../photo";
 import { Link, useLocation } from "react-router";
 import PhotoUsernameHover from "../photo-username-hover";
 import { useEffect, useRef } from "react";
+import useIsScreenXs from "../../hooks/useIsScreenXs";
 
 interface PhotoListProps {
   columns: Basic[][];
@@ -12,12 +13,19 @@ interface PhotoListProps {
 const PhotoList = ({ columns, observerFunction }: PhotoListProps) => {
   const location = useLocation();
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const isXs = useIsScreenXs();
 
   useEffect(() => {
     if (!observerRef) return;
 
     return () => observerRef.current?.disconnect();
   }, []);
+
+  useEffect(() => {
+    if (isXs && observerRef.current) {
+      observerRef.current.disconnect();
+    }
+  }, [isXs]);
 
   const createObserver = (element: HTMLDivElement) => {
     if (!element || !observerFunction) return;
@@ -57,8 +65,12 @@ const PhotoList = ({ columns, observerFunction }: PhotoListProps) => {
                   />
                 </Photo>
               </Link>
-              {internArrayIndex === internArray.length - 1 && (
-                <div ref={createObserver}></div>
+              {!isXs && (
+                <>
+                  {internArrayIndex === internArray.length - 1 && (
+                    <div ref={createObserver}></div>
+                  )}
+                </>
               )}
             </>
           ))}
