@@ -7,11 +7,13 @@ import PhotoPage from "./pages/photo-page";
 import PhotoModal from "./components/photo-modal";
 import useIsModalOpen from "./hooks/useIsModalOpen";
 import { useEffect } from "react";
+import useIsScreenXs from "./hooks/useIsScreenXs";
 
 function App() {
   const location = useLocation();
   const background = location.state && location.state.background;
   const isModalOpen = useIsModalOpen();
+  const isXs = useIsScreenXs();
 
   useEffect(() => {
     if (isModalOpen) {
@@ -28,12 +30,12 @@ function App() {
   return (
     <>
       <Header />
-      <Routes location={background || location}>
+      <Routes location={isXs ? location : background || location}>
         <Route path="/" element={<Home />} />
         <Route path="/search/:query" element={<Search />} />
         <Route path="/photo/:id" element={<PhotoPage />} />
       </Routes>
-      {background && (
+      {background && !isXs && (
         <Routes>
           <Route
             path="/photo/:id"
