@@ -8,7 +8,9 @@ const Header = () => {
     <Container>
       <Logo />
       <SearchInput />
-      <UserCircleIcon className="size-8 text-black shrink-0" />
+      <div>
+        <UserCircleIcon className="size-8 text-black shrink-0" />
+      </div>
     </Container>
   );
 };

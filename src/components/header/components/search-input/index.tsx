@@ -37,7 +37,7 @@ const SearchInput = () => {
         onChange={handleChangeInput}
         className={`${
           isFocused ? "bg-white" : "bg-zinc-200"
-        } transition-colors rounded-3xl p-2 grow px-10 outline-0 border border-zinc-200 `}
+        } transition-colors rounded-3xl p-2 grow px-10 outline-0 border border-zinc-200`}
         placeholder="Pesquise fotos e ilustrações"
       />
     </div>
