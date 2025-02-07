@@ -19,8 +19,8 @@ const PhotoModal = ({ children }: { children: ReactNode }) => {
       >
         <XMarkIcon className="size-8" />
       </button>
-      <div className="w-full md:w-3/4 z-50">
-        <div className="bg-white rounded-md">{children}</div>
+      <div className="w-full md:w-3/4 z-50 lg:h-full">
+        <div className="bg-white rounded-md h-full">{children}</div>
       </div>
     </div>
   );

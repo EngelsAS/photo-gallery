@@ -80,7 +80,7 @@ const PhotoPage = () => {
   };
 
   return (
-    <div className="p-3 flex flex-col gap-3">
+    <div className="p-3 flex flex-col gap-3 lg:h-full">
       <div className="flex items-center justify-between">
         <div className="flex gap-3">
           <Avatar src={photoInfos?.user.profile_image.medium} />
@@ -114,8 +114,8 @@ const PhotoPage = () => {
         </div>
       </div>
 
-      <div className="w-full flex" ref={divRef}>
-        <div className="h-[580px] mx-auto max-w-full">
+      <div className="w-full h-full flex overflow-hidden" ref={divRef}>
+        <div className="mx-auto max-w-full">
           {photoInfos && (
             <div
               onClick={() => {
