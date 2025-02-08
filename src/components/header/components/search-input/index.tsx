@@ -27,7 +27,7 @@ const SearchInput = () => {
   };
 
   return (
-    <div className="relative flex items-center grow">
+    <div className="relative flex items-center grow max-w-3/4">
       <MagnifyingGlassIcon className="size-5 text-zinc-500 absolute left-3" />
       <input
         onFocus={handleFocus}
