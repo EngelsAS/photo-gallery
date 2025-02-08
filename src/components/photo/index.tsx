@@ -15,6 +15,7 @@ interface PhotoProps {
   gradualLoading?: boolean;
   isFullScreen?: boolean;
   expandable?: boolean;
+  objectCover?: "cover" | "contain";
 }
 
 const Photo = ({
@@ -26,6 +27,7 @@ const Photo = ({
   gradualLoading,
   isFullScreen,
   expandable,
+  objectCover,
 }: PhotoProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [blurHeight, setBlurHeight] = useState(0);
@@ -107,20 +109,22 @@ const Photo = ({
           !isLoaded && gradualImagesUrls.length === 0 ? "block" : "hidden"
         }`}
       >
-        <Blurhash
-          hash={data.blur_hash || ""}
-          width="100%"
-          height="100%"
-          resolutionX={32}
-          resolutionY={32}
-          punch={1}
-        />
+        {data.blur_hash && (
+          <Blurhash
+            hash={data.blur_hash}
+            width="100%"
+            height="100%"
+            resolutionX={32}
+            resolutionY={32}
+            punch={1}
+          />
+        )}
       </div>
 
       <img
-        className={`w-full h-full object-contain ${
-          isLoaded ? "block" : "hidden"
-        }`}
+        className={`w-full h-full object-${
+          objectCover ? objectCover : "contain"
+        } ${isLoaded ? "block" : "hidden"}`}
         src={imageSrc}
       />
 

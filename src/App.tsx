@@ -8,6 +8,7 @@ import PhotoModal from "./components/photo-modal";
 import useIsModalOpen from "./hooks/useIsModalOpen";
 import { useEffect } from "react";
 import useIsScreenXs from "./hooks/useIsScreenXs";
+import Test from "./pages/test";
 
 function App() {
   const location = useLocation();
@@ -34,6 +35,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/search/:query" element={<Search />} />
         <Route path="/photo/:id" element={<PhotoPage />} />
+        <Route path="/test" element={<Test />} />
       </Routes>
       {background && !isXs && (
         <Routes>
