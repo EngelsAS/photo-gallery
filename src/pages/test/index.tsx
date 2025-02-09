@@ -9,18 +9,9 @@ const Test = () => {
     }
   };
 
-  const testeFunction = (valor: string) => {
-    const array = Array.from({ length: 6 }).fill(0);
-
-    console.log(valor);
-  };
-
   return (
     <div>
-      <button
-        onClick={() => testeFunction("deise")}
-        className="p-2 bg-black text-white"
-      >
+      <button onClick={fetchData} className="p-2 bg-black text-white">
         console
       </button>
       <button className="p-3 bg-amber-400 text-white rounded-md">
