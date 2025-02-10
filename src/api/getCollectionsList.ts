@@ -3,7 +3,6 @@ import { unsplash } from "./unsplash";
 
 export const getCollectionsList = async (perPage: number = 4) => {
   const resp = await unsplash.collections.list({ page: 1, perPage: perPage });
-  console.log(resp);
 
   if (resp.type === "success") {
     return resp.response.results as Basic[];

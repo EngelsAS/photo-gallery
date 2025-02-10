@@ -4,7 +4,7 @@ import BorderedBox from "../../components/bordered-box";
 import MainContainer from "../../components/main-container";
 import useLoadCollection from "../../hooks/useLoadCollectionList";
 import SkeletonLoading from "../../components/skeleton-loading";
-import { LinkIcon } from "@heroicons/react/24/outline";
+import { ExclamationCircleIcon, LinkIcon } from "@heroicons/react/24/outline";
 import PhotoList from "../../components/photo-list";
 import IntersectionDiv from "../../components/loading-card";
 
@@ -91,6 +91,16 @@ const CollectionPage = () => {
             </div>
           )}
       </div>
+      {error && (
+        <div className="flex justify-center items-center gap-3">
+          <ExclamationCircleIcon className="size-7" />
+          <p>
+            O limite de requisições por hora foi ultrapassado, este projeto foi
+            feito apenas para fins educacionais e utiliza a versão de
+            demonstraçao da Unplash API. Por favor, volte mais tarde.
+          </p>
+        </div>
+      )}
       {!error && !totalReached && <IntersectionDiv ref={loadingRef} />}
     </MainContainer>
   );

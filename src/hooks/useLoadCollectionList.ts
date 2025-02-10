@@ -18,6 +18,7 @@ const useLoadCollection = ({ id }: useLoadCollectionProps) => {
   const observerRef = useRef<IntersectionObserver | null>(null);
   const [totalReached, setTotalReached] = useState(false);
   const totalPages = useRef<number>(-1);
+  const heightOfEachColumn = useRef<number[]>([]);
 
   const feedPage = useRef<number>(1);
 
@@ -27,19 +28,35 @@ const useLoadCollection = ({ id }: useLoadCollectionProps) => {
     if (photoColumns.length === 0) {
       setPhotoColumns(newItems);
     } else {
+      if (heightOfEachColumn.current.length === 0) {
+        photoColumns.forEach((column) => {
+          const height = column.reduce(
+            (acc, value) => (acc += value.height),
+            0
+          );
+
+          heightOfEachColumn.current.push(height);
+        });
+
+        console.log(heightOfEachColumn.current);
+      }
+
+      ///-------------------------------
       const distributedList = JSON.parse(
         JSON.stringify(photoColumns)
       ) as BasicPhotos[][];
       newItems.flat().forEach((item) => {
-        let minLengthColumIndex = 0;
-        const columnsLength = distributedList.map((column, index) => ({
-          index: index,
-          length: column.length,
-        }));
-        columnsLength.sort((a, b) => a.length - b.length);
-        minLengthColumIndex = columnsLength[0].index;
-        distributedList[minLengthColumIndex].push(item);
+        console.log("array de altura das colunas");
+        console.log(heightOfEachColumn.current);
+        const smallestColumnIndex = heightOfEachColumn.current.indexOf(
+          Math.min(...heightOfEachColumn.current)
+        );
+        console.log("indice com a menor altura");
+        console.log(smallestColumnIndex);
+        distributedList[smallestColumnIndex || 0].push(item);
+        heightOfEachColumn.current[smallestColumnIndex || 0] += item.height;
       });
+      console.log(distributedList);
       setPhotoColumns(distributedList);
     }
   };
@@ -69,14 +86,11 @@ const useLoadCollection = ({ id }: useLoadCollectionProps) => {
   }, [isLoading]);
 
   const handleObserver = () => {
-    console.log("total de paginas: " + totalPages.current);
-    console.log("pagina atual: " + feedPage.current);
     if (totalPages.current !== -1 && feedPage.current >= totalPages.current) {
       setTotalReached(true);
     }
 
     if (totalPages.current === -1 || feedPage.current <= totalPages.current) {
-      console.log("ta vindo pra cá né?");
       if (!isLoading) {
         setIsLoading(true);
       }
