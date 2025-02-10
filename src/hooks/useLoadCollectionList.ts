@@ -16,6 +16,8 @@ const useLoadCollection = ({ id }: useLoadCollectionProps) => {
   const [error, setError] = useState<string | null>(null);
   const isFirstLoad = useRef(true);
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const [totalReached, setTotalReached] = useState(false);
+  const totalPages = useRef<number>(-1);
 
   const feedPage = useRef<number>(1);
 
@@ -67,8 +69,17 @@ const useLoadCollection = ({ id }: useLoadCollectionProps) => {
   }, [isLoading]);
 
   const handleObserver = () => {
-    if (!isLoading) {
-      setIsLoading(true);
+    console.log("total de paginas: " + totalPages.current);
+    console.log("pagina atual: " + feedPage.current);
+    if (totalPages.current !== -1 && feedPage.current >= totalPages.current) {
+      setTotalReached(true);
+    }
+
+    if (totalPages.current === -1 || feedPage.current <= totalPages.current) {
+      console.log("ta vindo pra cá né?");
+      if (!isLoading) {
+        setIsLoading(true);
+      }
     }
   };
 
@@ -98,9 +109,12 @@ const useLoadCollection = ({ id }: useLoadCollectionProps) => {
 
   const fetchPhotos = async () => {
     const resp = await getCollectionPhotos(id, feedPage.current);
-    console.log(resp);
 
     if (resp.photos) {
+      if (resp.total) {
+        totalPages.current = Math.ceil(resp.total / 9);
+      }
+
       if (feedPage.current > 1) {
         resp.photos.shift();
       }
@@ -125,6 +139,7 @@ const useLoadCollection = ({ id }: useLoadCollectionProps) => {
     error,
     loadingRef,
     isLoading,
+    totalReached,
     handleObserver,
   };
 };

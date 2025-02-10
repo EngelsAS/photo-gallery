@@ -8,6 +8,8 @@ export const getCollectionPhotos = async (id: string, page: number) => {
     perPage: 9,
   });
 
+  console.log(resp);
+
   if (resp.type === "error") {
     return {
       type: "error",
@@ -18,5 +20,6 @@ export const getCollectionPhotos = async (id: string, page: number) => {
   return {
     type: "success",
     photos: resp.response.results,
+    total: resp.response.total,
   } as PhotosResponse;
 };

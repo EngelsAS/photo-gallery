@@ -17,6 +17,8 @@ const CollectionPage = () => {
     photoColumns,
     handleObserver,
     loadingRef,
+    totalReached,
+    error,
   } = useLoadCollection({ id: id || "" });
 
   if (!id) {
@@ -89,7 +91,7 @@ const CollectionPage = () => {
             </div>
           )}
       </div>
-      <IntersectionDiv ref={loadingRef} />
+      {!error && !totalReached && <IntersectionDiv ref={loadingRef} />}
     </MainContainer>
   );
 };

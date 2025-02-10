@@ -46,7 +46,7 @@ const PhotoList = ({ columns, observerFunction }: PhotoListProps) => {
         }
       },
       {
-        rootMargin: "10%",
+        rootMargin: "50%",
       }
     );
 
