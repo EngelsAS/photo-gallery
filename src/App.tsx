@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import useIsScreenXs from "./hooks/useIsScreenXs";
 import Test from "./pages/test";
 import CollectionPage from "./pages/collection-page";
+import Footer from "./components/footer";
 
 function App() {
   const location = useLocation();
@@ -51,6 +52,7 @@ function App() {
           />
         </Routes>
       )}
+      <Footer />
     </>
   );
 }
