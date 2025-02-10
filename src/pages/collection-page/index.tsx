@@ -35,7 +35,7 @@ const CollectionPage = () => {
       <div className="flex justify-between items-center">
         <div className="flex flex-col gap-4">
           <h1 className="text-5xl font-bold">
-            {isLoading ? (
+            {isLoading && !collectionInfos ? (
               <SkeletonLoading className="w-3xs h-10" />
             ) : (
               collectionInfos?.title
@@ -43,7 +43,7 @@ const CollectionPage = () => {
           </h1>
           <div className="flex gap-3 items-center">
             <Avatar src={collectionInfos?.user.profile_image.medium} />
-            {isLoading ? (
+            {isLoading && !collectionInfos ? (
               <SkeletonLoading className="h-5 w-20" />
             ) : (
               <p className="font-semibold">{collectionInfos?.user.name}</p>
@@ -60,7 +60,7 @@ const CollectionPage = () => {
       </div>
 
       <div>
-        {isLoading ? (
+        {isLoading && !collectionInfos ? (
           <SkeletonLoading className="w-15 h-5" />
         ) : (
           <>{collectionInfos?.total_photos} imagens</>
