@@ -8,6 +8,7 @@ export const getQuery = async (query: string, page: number) => {
     perPage: 9,
     orderBy: "relevant",
   });
+  console.log(result);
 
   if (result.type === "error") {
     return {
@@ -18,6 +19,8 @@ export const getQuery = async (query: string, page: number) => {
 
   return {
     type: "success",
+    total: result.response.total,
+    total_pages: result.response.total_pages,
     photos: result.response.results,
   } as PhotosResponse;
 };

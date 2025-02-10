@@ -15,7 +15,7 @@ const CollectionList = () => {
           {loadingList && (
             <>
               {Array.from({ length: 4 }).map((_, index) => (
-                <div className="flex gap-2 w-full p-2">
+                <div key={index} className="flex gap-2 w-full p-2">
                   <div
                     key={index}
                     className="h-13 w-13 rounded-md bg-zinc-200 animate-pulse"

@@ -13,17 +13,15 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
   const [photoColumns, setPhotoColumns] = useState<Basic[][]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [totalReached, setTotalReached] = useState(false);
+  const totalPhotos = useRef<number>(-1);
   const isFirstLoad = useRef(true);
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const totalPages = useRef<number>(-1);
 
   const feedPage = useRef<number>(1);
 
   const loadingRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    feedPage.current = 1;
-    setPhotoColumns([]);
-  }, [query]);
 
   const addNewPhotosOnList = (newItems: Basic[][]) => {
     if (photoColumns.length === 0) {
@@ -65,8 +63,19 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
   }, [isLoading]);
 
   const handleObserver = () => {
-    if (!isLoading) {
-      setIsLoading(true);
+    if (totalPages.current !== -1 && feedPage.current >= totalPages.current) {
+      setTotalReached(true);
+    }
+
+    if (
+      !query ||
+      totalPages.current === -1 ||
+      feedPage.current <= totalPages.current
+    ) {
+      console.log("ta vindo pra cá né?");
+      if (!isLoading) {
+        setIsLoading(true);
+      }
     }
   };
 
@@ -104,6 +113,11 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
       }
 
       if (result.photos) {
+        console.log("entao ta vindo pra ca tbm");
+        if (query) {
+          totalPhotos.current = result.total || 0;
+          totalPages.current = result.total_pages || 0;
+        }
         if (feedPage.current > 1) {
           result.photos.shift();
         }
@@ -125,6 +139,7 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
     error,
     loadingRef,
     isLoading,
+    totalReached,
     handleObserver,
   };
 };

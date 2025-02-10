@@ -21,7 +21,7 @@ const PopularTopicsList = () => {
             </>
           )}
           {topics.map((item, index) => (
-            <Link to={`/topic/${item.slug}`}>
+            <Link to={`/topic/${item.slug}`} key={index}>
               <BorderedBox
                 key={index}
                 className="flex px-2 py-1 hover:border-black text-zinc-500 hover:text-black transition-colors"
