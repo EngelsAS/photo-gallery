@@ -11,7 +11,7 @@ type useLoadPhotosProps = {
 
 const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
   const [photoColumns, setPhotoColumns] = useState<Basic[][]>([]);
-  const [isFetchingData, setIsFetchingData] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const isFirstLoad = useRef(true);
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -48,12 +48,12 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
 
   useEffect(() => {
     if (photoColumns.length > 0) {
-      setIsFetchingData(false);
+      setIsLoading(false);
     }
   }, [photoColumns]);
 
   useEffect(() => {
-    if (isFetchingData) {
+    if (isLoading) {
       if (isFirstLoad.current) {
         isFirstLoad.current = false;
       }
@@ -62,11 +62,11 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
       feedPage.current += 1;
     }
     //eslint-disable-next-line
-  }, [isFetchingData]);
+  }, [isLoading]);
 
   const handleObserver = () => {
-    if (!isFetchingData) {
-      setIsFetchingData(true);
+    if (!isLoading) {
+      setIsLoading(true);
     }
   };
 
@@ -96,21 +96,28 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
 
   const fetchFeed = async () => {
     let result: PhotosResponse;
-
-    if (!query) {
-      result = await getFeed(feedPage.current);
-    } else {
-      result = await getQuery(query, feedPage.current);
-    }
-
-    if (result.photos) {
-      if (feedPage.current > 1) {
-        result.photos.shift();
+    console.log("ta fazendo esse fetch");
+    try {
+      if (!query) {
+        result = await getFeed(feedPage.current);
+      } else {
+        result = await getQuery(query, feedPage.current);
       }
-      const splitedPhotos = divideArrayInThree(result.photos);
-      addNewPhotosOnList(splitedPhotos);
-    } else if (result.error) {
-      setError(result.error);
+
+      if (result.photos) {
+        if (feedPage.current > 1) {
+          result.photos.shift();
+        }
+        const splitedPhotos = divideArrayInThree(result.photos);
+        addNewPhotosOnList(splitedPhotos);
+      } else if (result.error) {
+        setIsLoading(false);
+        setError(result.error);
+      }
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+      setError("403");
     }
   };
 
@@ -118,6 +125,7 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
     photoColumns,
     error,
     loadingRef,
+    isLoading,
     handleObserver,
   };
 };
