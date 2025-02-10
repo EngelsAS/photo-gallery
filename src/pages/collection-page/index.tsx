@@ -67,6 +67,28 @@ const CollectionPage = () => {
       <div className="flex gap-3 flex-wrap md:flex-nowrap">
         <PhotoList columns={photoColumns} observerFunction={handleObserver} />
       </div>
+      <div>
+        {collectionInfos?.user.name.includes("Unsplash+") &&
+          !isLoading &&
+          photoColumns[0].length === 0 && (
+            <div className="flex flex-col items-center justify-center">
+              <h4 className="text-center">
+                Esta coleção faz parte do catálogo de coleções exclusivas da
+                plataforma oficial Unsplash e pode ser acessada apenas pelo site
+                oficial
+              </h4>
+
+              <a
+                href={`https://unsplash.com/pt-br/cole%C3%A7%C3%B5es/${id}`}
+                target="_blank"
+                className="underline text-cyan-600"
+                title={`https://unsplash.com/pt-br/cole%C3%A7%C3%B5es/${id}`}
+              >
+                unsplash.com
+              </a>
+            </div>
+          )}
+      </div>
       <IntersectionDiv ref={loadingRef} />
     </MainContainer>
   );

@@ -19,7 +19,7 @@ const Home = () => {
       <IntersectionDiv
         ref={loadingRef}
         height={Math.ceil(Math.random() * (576 - 288) + 288)}
-      />
+      ></IntersectionDiv>
     </div>
   );
 };
