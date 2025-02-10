@@ -23,14 +23,11 @@ const PhotoList = ({ columns, observerFunction }: PhotoListProps) => {
   }, []);
 
   useEffect(() => {
-    console.log("aqui é no useEffect", isXs);
     if (isXs && observerRef.current) {
-      console.log("desativou o observer");
       observerRef.current.disconnect();
     }
 
     if (!isXs && lastDivRef.current && observerFunction) {
-      console.log("chamou o observer");
       observerFunction();
     }
 

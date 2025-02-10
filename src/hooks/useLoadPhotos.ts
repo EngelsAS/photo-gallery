@@ -96,7 +96,6 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
 
   const fetchFeed = async () => {
     let result: PhotosResponse;
-    console.log("ta fazendo esse fetch");
     try {
       if (!query) {
         result = await getFeed(feedPage.current);

@@ -9,7 +9,6 @@ const useIsScreenXs = () => {
     const handleResize = () => {
       clearTimeout(timeout);
       timeout = setTimeout(() => {
-        console.log(window.innerWidth < 640);
         setIsXs(window.innerWidth < 640);
       }, 200);
     };
@@ -20,10 +19,6 @@ const useIsScreenXs = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
-  useEffect(() => {
-    console.log("aqui é no custom hook", isXs);
-  }, [isXs]);
 
   return isXs;
 };
