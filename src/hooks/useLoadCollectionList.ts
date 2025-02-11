@@ -13,6 +13,7 @@ const useLoadCollection = ({ id }: useLoadCollectionProps) => {
   const [photoColumns, setPhotoColumns] = useState<BasicPhotos[][]>([]);
   const [collectionInfos, setCollectionInfos] = useState<BasicCollection>();
   const [isLoading, setIsLoading] = useState(false);
+  const [columnWidth, setColumnWidth] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const isFirstLoad = useRef(true);
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -30,10 +31,10 @@ const useLoadCollection = ({ id }: useLoadCollectionProps) => {
     } else {
       if (heightOfEachColumn.current.length === 0) {
         photoColumns.forEach((column) => {
-          const height = column.reduce(
-            (acc, value) => (acc += value.height),
-            0
-          );
+          const height = column.reduce((acc, value) => {
+            const newHeight = (value.height * columnWidth) / value.width;
+            return (acc += newHeight);
+          }, 0);
 
           heightOfEachColumn.current.push(height);
         });
@@ -54,7 +55,8 @@ const useLoadCollection = ({ id }: useLoadCollectionProps) => {
         console.log("indice com a menor altura");
         console.log(smallestColumnIndex);
         distributedList[smallestColumnIndex || 0].push(item);
-        heightOfEachColumn.current[smallestColumnIndex || 0] += item.height;
+        const newHeight = (item.height * columnWidth) / item.width;
+        heightOfEachColumn.current[smallestColumnIndex || 0] += newHeight;
       });
       console.log(distributedList);
       setPhotoColumns(distributedList);
@@ -153,6 +155,8 @@ const useLoadCollection = ({ id }: useLoadCollectionProps) => {
     error,
     loadingRef,
     isLoading,
+    setColumnWidth,
+    columnWidth,
     totalReached,
     handleObserver,
   };

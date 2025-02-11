@@ -7,6 +7,7 @@ import SkeletonLoading from "../../components/skeleton-loading";
 import { ExclamationCircleIcon, LinkIcon } from "@heroicons/react/24/outline";
 import PhotoList from "../../components/photo-list";
 import IntersectionDiv from "../../components/loading-card";
+import ReqLimitError from "../../components/req-limit-error";
 
 const CollectionPage = () => {
   const { id } = useParams();
@@ -18,6 +19,7 @@ const CollectionPage = () => {
     handleObserver,
     loadingRef,
     totalReached,
+    setColumnWidth,
     error,
   } = useLoadCollection({ id: id || "" });
 
@@ -67,7 +69,11 @@ const CollectionPage = () => {
         )}
       </div>
       <div className="flex gap-3 flex-wrap md:flex-nowrap">
-        <PhotoList columns={photoColumns} observerFunction={handleObserver} />
+        <PhotoList
+          columns={photoColumns}
+          observerFunction={handleObserver}
+          setColumnWidth={setColumnWidth}
+        />
       </div>
       <div>
         {collectionInfos?.user.name.includes("Unsplash+") &&
@@ -91,16 +97,7 @@ const CollectionPage = () => {
             </div>
           )}
       </div>
-      {error && (
-        <div className="flex justify-center items-center gap-3">
-          <ExclamationCircleIcon className="size-7" />
-          <p>
-            O limite de requisições por hora foi ultrapassado, este projeto foi
-            feito apenas para fins educacionais e utiliza a versão de
-            demonstraçao da Unplash API. Por favor, volte mais tarde.
-          </p>
-        </div>
-      )}
+      {error && <ReqLimitError />}
       {!error && !totalReached && <IntersectionDiv ref={loadingRef} />}
     </MainContainer>
   );

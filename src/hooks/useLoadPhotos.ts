@@ -13,6 +13,8 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
   const [photoColumns, setPhotoColumns] = useState<Basic[][]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [columnWidth, setColumnWidth] = useState(0);
+  const heightOfEachColumn = useRef<number[]>([]);
   const [totalReached, setTotalReached] = useState(false);
   const isFirstLoad = useRef(true);
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -26,19 +28,36 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
     if (photoColumns.length === 0) {
       setPhotoColumns(newItems);
     } else {
+      if (heightOfEachColumn.current.length === 0) {
+        photoColumns.forEach((column) => {
+          const height = column.reduce((acc, value) => {
+            const newHeight = (value.height * columnWidth) / value.width;
+            return (acc += newHeight);
+          }, 0);
+
+          heightOfEachColumn.current.push(height);
+        });
+
+        console.log(heightOfEachColumn.current);
+      }
+
+      ///-------------------------------
       const distributedList = JSON.parse(
         JSON.stringify(photoColumns)
       ) as Basic[][];
       newItems.flat().forEach((item) => {
-        let minLengthColumIndex = 0;
-        const columnsLength = distributedList.map((column, index) => ({
-          index: index,
-          length: column.length,
-        }));
-        columnsLength.sort((a, b) => a.length - b.length);
-        minLengthColumIndex = columnsLength[0].index;
-        distributedList[minLengthColumIndex].push(item);
+        console.log("array de altura das colunas");
+        console.log(heightOfEachColumn.current);
+        const smallestColumnIndex = heightOfEachColumn.current.indexOf(
+          Math.min(...heightOfEachColumn.current)
+        );
+        console.log("indice com a menor altura");
+        console.log(smallestColumnIndex);
+        distributedList[smallestColumnIndex || 0].push(item);
+        const newHeight = (item.height * columnWidth) / item.width;
+        heightOfEachColumn.current[smallestColumnIndex || 0] += newHeight;
       });
+      console.log(distributedList);
       setPhotoColumns(distributedList);
     }
   };
@@ -85,7 +104,7 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
         }
       },
       {
-        rootMargin: "10%",
+        rootMargin: "80%",
       }
     );
 
@@ -136,6 +155,7 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
     loadingRef,
     isLoading,
     totalReached,
+    setColumnWidth,
     handleObserver,
   };
 };

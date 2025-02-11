@@ -2,10 +2,8 @@ import PhotoList from "../../components/photo-list";
 import useLoadPhotos from "../../hooks/useLoadPhotos";
 import IntersectionDiv from "../../components/loading-card";
 import { capitalizeFirstLetter } from "../../utils/capitalize-first-letter";
-import {
-  ArrowPathIcon,
-  ExclamationCircleIcon,
-} from "@heroicons/react/24/outline";
+import { ArrowPathIcon } from "@heroicons/react/24/outline";
+import ReqLimitError from "../../components/req-limit-error";
 
 const SearchView = ({ query }: { query: string }) => {
   const {
@@ -14,6 +12,7 @@ const SearchView = ({ query }: { query: string }) => {
     handleObserver,
     error,
     totalReached,
+    setColumnWidth,
   } = useLoadPhotos({
     query: query || "",
   });
@@ -25,18 +24,13 @@ const SearchView = ({ query }: { query: string }) => {
           <h2>{capitalizeFirstLetter(query || "")}</h2>
         </div>
         <div className="max-w-7xl mx-auto my-10 flex gap-3">
-          <PhotoList columns={columns} observerFunction={handleObserver} />
+          <PhotoList
+            columns={columns}
+            observerFunction={handleObserver}
+            setColumnWidth={setColumnWidth}
+          />
         </div>
-        {error && (
-          <div className="flex justify-center items-center gap-3">
-            <ExclamationCircleIcon className="size-7" />
-            <p>
-              O limite de requisições por hora foi ultrapassado, este projeto
-              foi feito apenas para fins educacionais e utiliza a versão de
-              demonstraçao da Unplash API. Por favor, volte mais tarde.
-            </p>
-          </div>
-        )}
+        {error && <ReqLimitError />}
         {!error && !totalReached && (
           <IntersectionDiv ref={loadingRef}>
             <ArrowPathIcon className="size-10 animate-spin text-zinc-500" />
