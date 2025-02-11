@@ -6,7 +6,7 @@ const PopularTopicsList = () => {
   const { topics, isLoading } = useLoadTopics();
 
   return (
-    <BorderedBox className="hidden sm:block w-full ">
+    <BorderedBox className="w-full self-stretch">
       <div className="py-3 px-5 flex flex-col gap-2">
         <p className="font-semibold">Tópicos populares</p>
         <div className="flex gap-3 flex-wrap">
