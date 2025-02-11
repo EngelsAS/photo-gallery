@@ -2,7 +2,7 @@ import { Link, useParams } from "react-router";
 import Avatar from "../../components/avatar";
 import BorderedBox from "../../components/bordered-box";
 import MainContainer from "../../components/main-container";
-import useLoadCollection from "../../hooks/useLoadCollectionList";
+import useLoadCollection from "../../hooks/useLoadCollection";
 import SkeletonLoading from "../../components/skeleton-loading";
 import { LinkIcon } from "@heroicons/react/24/outline";
 import PhotoList from "../../components/photo-list";
