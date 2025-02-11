@@ -104,7 +104,7 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
         }
       },
       {
-        rootMargin: "80%",
+        rootMargin: "1000px",
       }
     );
 
@@ -156,7 +156,6 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
     isLoading,
     totalReached,
     setColumnWidth,
-    handleObserver,
   };
 };
 

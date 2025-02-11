@@ -3,31 +3,16 @@ import Photo from "../photo";
 import { Link, useLocation } from "react-router";
 import PhotoUsernameHover from "../photo-username-hover";
 import { Dispatch, Fragment, SetStateAction, useEffect, useRef } from "react";
-import useIsScreenXs from "../../hooks/useIsScreenXs";
 
 interface PhotoListProps {
   columns: Basic[][];
-  observerFunction?: () => void;
   setColumnWidth: Dispatch<SetStateAction<number>>;
 }
 
-const PhotoList = ({
-  columns,
-  observerFunction,
-  setColumnWidth,
-}: PhotoListProps) => {
+const PhotoList = ({ columns, setColumnWidth }: PhotoListProps) => {
   const location = useLocation();
   const columnRef = useRef<HTMLDivElement>(null);
-  const observerRef = useRef<IntersectionObserver | null>(null);
   const resizeRef = useRef<ResizeObserver | null>(null);
-  const lastDivRef = useRef<HTMLDivElement | null>(null);
-  const isXs = useIsScreenXs();
-
-  useEffect(() => {
-    if (!observerRef) return;
-
-    return () => observerRef.current?.disconnect();
-  }, []);
 
   useEffect(() => {
     if (columnRef.current && setColumnWidth) {
@@ -62,37 +47,6 @@ const PhotoList = ({
     //eslint-disable-next-line
   }, [columns]);
 
-  useEffect(() => {
-    if (isXs && observerRef.current) {
-      observerRef.current.disconnect();
-    }
-
-    if (!isXs && lastDivRef.current && observerFunction) {
-      observerFunction();
-    }
-
-    //eslint-disable-next-line
-  }, [isXs]);
-
-  const createObserver = (element: HTMLDivElement) => {
-    if (!element || !observerFunction) return;
-
-    lastDivRef.current = element;
-
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          observerFunction();
-        }
-      },
-      {
-        rootMargin: "50%",
-      }
-    );
-
-    observerRef.current.observe(element);
-  };
-
   return (
     <>
       {columns.map((internArray, indexMainArray) => (
@@ -111,13 +65,6 @@ const PhotoList = ({
                   />
                 </Photo>
               </Link>
-              {!isXs && (
-                <>
-                  {internArrayIndex === internArray.length - 1 && (
-                    <div ref={createObserver}></div>
-                  )}
-                </>
-              )}
             </Fragment>
           ))}
         </div>

@@ -9,7 +9,6 @@ const SearchView = ({ query }: { query: string }) => {
   const {
     photoColumns: columns,
     loadingRef,
-    handleObserver,
     error,
     totalReached,
     setColumnWidth,
@@ -24,11 +23,7 @@ const SearchView = ({ query }: { query: string }) => {
           <h2>{capitalizeFirstLetter(query || "")}</h2>
         </div>
         <div className="max-w-7xl mx-auto my-10 flex gap-3">
-          <PhotoList
-            columns={columns}
-            observerFunction={handleObserver}
-            setColumnWidth={setColumnWidth}
-          />
+          <PhotoList columns={columns} setColumnWidth={setColumnWidth} />
         </div>
         {error && <ReqLimitError />}
         {!error && !totalReached && (

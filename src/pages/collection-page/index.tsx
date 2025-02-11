@@ -16,7 +16,6 @@ const CollectionPage = () => {
     collectionInfos,
     isLoading,
     photoColumns,
-    handleObserver,
     loadingRef,
     totalReached,
     setColumnWidth,
@@ -69,11 +68,7 @@ const CollectionPage = () => {
         )}
       </div>
       <div className="flex gap-3 flex-wrap md:flex-nowrap">
-        <PhotoList
-          columns={photoColumns}
-          observerFunction={handleObserver}
-          setColumnWidth={setColumnWidth}
-        />
+        <PhotoList columns={photoColumns} setColumnWidth={setColumnWidth} />
       </div>
       <div>
         {collectionInfos?.user.name.includes("Unsplash+") &&

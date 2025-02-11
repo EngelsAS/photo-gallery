@@ -158,7 +158,6 @@ const useLoadCollection = ({ id }: useLoadCollectionProps) => {
     setColumnWidth,
     columnWidth,
     totalReached,
-    handleObserver,
   };
 };
 
