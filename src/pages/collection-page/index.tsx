@@ -4,7 +4,7 @@ import BorderedBox from "../../components/bordered-box";
 import MainContainer from "../../components/main-container";
 import useLoadCollection from "../../hooks/useLoadCollectionList";
 import SkeletonLoading from "../../components/skeleton-loading";
-import { ExclamationCircleIcon, LinkIcon } from "@heroicons/react/24/outline";
+import { LinkIcon } from "@heroicons/react/24/outline";
 import PhotoList from "../../components/photo-list";
 import IntersectionDiv from "../../components/loading-card";
 import ReqLimitError from "../../components/req-limit-error";
