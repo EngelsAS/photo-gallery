@@ -6,7 +6,8 @@ import Avatar from "../../components/avatar";
 import Photo from "../../components/photo";
 import { checkDaysSincePublication } from "../../utils/check-days-since-publication";
 import { ArrowDownTrayIcon } from "@heroicons/react/24/outline";
-import { unsplash } from "../../api/unsplash";
+import { downloadImage } from "../../api/downloadImage";
+import LoadingButton from "../../components/loading-button";
 
 const PhotoPage = () => {
   const { id } = useParams();
@@ -54,28 +55,12 @@ const PhotoPage = () => {
     if (!photoInfos) return;
 
     setIsLoadingDownload(true);
-
-    const resp = await unsplash.photos.trackDownload({
-      downloadLocation: photoInfos.links.download_location,
-    });
-
-    if (resp.type === "success") {
-      try {
-        const imageResponse = await fetch(resp.response.url);
-        const imageBlob = await imageResponse.blob();
-        const blobUrl = URL.createObjectURL(imageBlob);
-        const link = document.createElement("a");
-        link.href = blobUrl;
-        link.setAttribute("download", `unsplash-${photoInfos.id}.jpg`);
-        document.body.appendChild(link);
-        link.click();
-        URL.revokeObjectURL(blobUrl);
-        document.body.removeChild(link);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoadingDownload(false);
-      }
+    try {
+      await downloadImage(photoInfos.links.download_location, photoInfos.id);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoadingDownload(false);
     }
   };
 
@@ -102,16 +87,9 @@ const PhotoPage = () => {
           )}
         </div>
 
-        <div
-          onClick={handleDownload}
-          className={`rounded-md border p-1 border-zinc-200 cursor-pointer hover:border-black  hover:text-black shadow transition-colors ${
-            isLoadingDownload
-              ? "animate-pulse pointer-events-none bg-stone-300 text-white"
-              : "text-zinc-400"
-          }`}
-        >
+        <LoadingButton onClick={handleDownload} isLoading={isLoadingDownload}>
           <ArrowDownTrayIcon className="size-7" />
-        </div>
+        </LoadingButton>
       </div>
 
       <div className="w-full h-full flex overflow-hidden" ref={divRef}>

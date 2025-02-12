@@ -24,7 +24,6 @@ const Home = () => {
 
     const onResize = () => {
       const width = window.innerWidth;
-      console.log(width);
       setWindowWidth(width * 2 - 20 - 16);
     };
 
