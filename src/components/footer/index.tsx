@@ -16,7 +16,8 @@ const Footer = () => {
             , apenas com objetivo educacional.
           </p>
           <p>
-            Projeto feito almejando replicar a experiência de usuário do site{" "}
+            Projeto feito almejando replicar as técnicas de otimização e
+            carregamento de imagem do site{" "}
             <a
               className="underline hover:text-cyan-600 transition-colors"
               href="https://unsplash.com/"

@@ -1,6 +1,5 @@
 import { Link, useParams } from "react-router";
 import Avatar from "../../components/avatar";
-import BorderedBox from "../../components/bordered-box";
 import MainContainer from "../../components/main-container";
 import useLoadCollection from "../../hooks/useLoadCollection";
 import SkeletonLoading from "../../components/skeleton-loading";
@@ -8,6 +7,8 @@ import { LinkIcon } from "@heroicons/react/24/outline";
 import PhotoList from "../../components/photo-list";
 import IntersectionDiv from "../../components/loading-card";
 import ReqLimitError from "../../components/req-limit-error";
+import BorderedButton from "../../components/bordered-button";
+import { useState } from "react";
 
 const CollectionPage = () => {
   const { id } = useParams();
@@ -21,6 +22,19 @@ const CollectionPage = () => {
     setColumnWidth,
     error,
   } = useLoadCollection({ id: id || "" });
+
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyLink = async () => {
+    try {
+      const url = window.location.href;
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000); // Reseta o status depois de 2s
+    } catch (err) {
+      console.error("Erro ao copiar:", err);
+    }
+  };
 
   if (!id) {
     return (
@@ -51,12 +65,20 @@ const CollectionPage = () => {
             )}
           </div>
         </div>
-        <div>
-          <BorderedBox className="py-2 px-3 text-zinc-500 flex gap-2 cursor-pointer hover:text-black hover:border-black transition-colors shadow">
+        <div className="relative">
+          <BorderedButton onClick={handleCopyLink}>
             <LinkIcon className="size-6" />
 
             <p className="font-semibold">Compartilhar</p>
-          </BorderedBox>
+          </BorderedButton>
+
+          <div
+            className={`absolute -bottom-9 whitespace-nowrap text-zinc-500 font-semibold bg-white rounded-md px-2 py-1 shadow transition-opacity ${
+              copied ? "opacity-100" : "opacity-0 pointer-events-none"
+            }`}
+          >
+            Link copiado!
+          </div>
         </div>
       </div>
 
