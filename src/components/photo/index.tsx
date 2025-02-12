@@ -122,9 +122,9 @@ const Photo = ({
       </div>
 
       <img
-        className={`w-full h-full object-${
+        className={`${isLoaded ? "block" : "hidden"} w-full h-full object-${
           objectCover ? objectCover : "contain"
-        } ${isLoaded ? "block" : "hidden"}`}
+        }`}
         src={imageSrc}
       />
 
