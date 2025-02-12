@@ -9,17 +9,25 @@ import useLoadPhotos from "../../hooks/useLoadPhotos";
 import CollectionList from "./collections-list";
 import PopularTopicsList from "./popular-topics-list";
 import ReqLimitError from "../../components/req-limit-error";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import useIsScreenXs from "../../hooks/useIsScreenXs";
 
 const Home = () => {
   const { photoColumns, loadingRef, error, setColumnWidth } = useLoadPhotos({});
   const [translated, setTranslated] = useState(false);
   const collectionsAndTopicsDivRef = useRef<HTMLDivElement | null>(null);
+  const isXs = useIsScreenXs();
 
   const handleClickSetaIr = () => {
     if (collectionsAndTopicsDivRef.current) {
-      collectionsAndTopicsDivRef.current.style.transform = `translateX(-51%)`;
-      console.log("translatada");
+      const parentWidth =
+        collectionsAndTopicsDivRef.current.parentElement?.offsetWidth || 0;
+      const divWidth = collectionsAndTopicsDivRef.current.offsetWidth;
+
+      const maxTranslate = Math.max(0, divWidth - parentWidth);
+
+      collectionsAndTopicsDivRef.current.style.transform = `translateX(-${maxTranslate}px)`;
+
       setTranslated(true);
     }
   };
@@ -30,6 +38,13 @@ const Home = () => {
       setTranslated(false);
     }
   };
+
+  useEffect(() => {
+    if (!isXs && collectionsAndTopicsDivRef.current) {
+      collectionsAndTopicsDivRef.current.style.transform = `translateX(0)`;
+      setTranslated(false);
+    }
+  }, [isXs]);
 
   return (
     <div className="max-w-7xl mx-auto flex flex-col gap-10 mt-10">

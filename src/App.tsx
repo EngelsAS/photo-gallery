@@ -11,6 +11,7 @@ import useIsScreenXs from "./hooks/useIsScreenXs";
 import Test from "./pages/test";
 import CollectionPage from "./pages/collection-page";
 import Footer from "./components/footer";
+import TopicPage from "./pages/topic-page";
 
 function App() {
   const location = useLocation();
@@ -38,6 +39,7 @@ function App() {
         <Route path="/search/:query" element={<Search />} />
         <Route path="/photo/:id" element={<PhotoPage />} />
         <Route path="/collection/:id/:slug" element={<CollectionPage />} />
+        <Route path="/topic/:slug" element={<TopicPage />} />
         <Route path="/test" element={<Test />} />
       </Routes>
       {background && !isXs && (
