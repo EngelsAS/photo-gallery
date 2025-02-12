@@ -18,7 +18,7 @@ const Home = () => {
 
   const handleClickSetaIr = () => {
     if (collectionsAndTopicsDivRef.current) {
-      collectionsAndTopicsDivRef.current.style.transform = `translateX(-44.5%)`;
+      collectionsAndTopicsDivRef.current.style.transform = `translateX(-51%)`;
       console.log("translatada");
       setTranslated(true);
     }
@@ -52,7 +52,7 @@ const Home = () => {
         </button>
 
         <div
-          className="flex gap-5 min-w-5xl px-2 xl:px-0 sm:w-auto sm:min-w-auto transition-transform relative items-center"
+          className="flex gap-5 min-w-5xl px-2 xl:px-0 sm:w-full sm:min-w-auto transition-transform relative items-center"
           ref={collectionsAndTopicsDivRef}
         >
           <CollectionList />
