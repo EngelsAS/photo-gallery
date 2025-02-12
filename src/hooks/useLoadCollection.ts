@@ -107,7 +107,7 @@ const useLoadCollection = ({ id }: useLoadCollectionProps) => {
         }
       },
       {
-        rootMargin: "10%",
+        rootMargin: "1000px",
       }
     );
 

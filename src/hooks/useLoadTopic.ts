@@ -107,7 +107,7 @@ const useLoadTopic = ({ slug }: useLoadTopicProps) => {
         }
       },
       {
-        rootMargin: "10%",
+        rootMargin: "1000px",
       }
     );
 
