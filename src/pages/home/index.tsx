@@ -67,7 +67,7 @@ const Home = () => {
         </button>
 
         <div
-          className="flex gap-5 min-w-5xl px-2 xl:px-0 sm:w-full sm:min-w-auto transition-transform relative items-center"
+          className={`flex gap-5 min-w-[966px] px-2 xl:px-0 sm:w-full sm:min-w-auto transition-transform relative items-center`}
           ref={collectionsAndTopicsDivRef}
         >
           <CollectionList />
