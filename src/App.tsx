@@ -20,7 +20,7 @@ function App() {
   const isXs = useIsScreenXs();
 
   useEffect(() => {
-    if (isModalOpen) {
+    if (isModalOpen && !isXs) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
@@ -29,7 +29,7 @@ function App() {
     return () => {
       document.body.style.overflow = "";
     };
-  }, [isModalOpen]);
+  }, [isModalOpen, isXs]);
 
   return (
     <>
