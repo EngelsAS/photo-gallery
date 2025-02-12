@@ -16,7 +16,24 @@ const Home = () => {
   const { photoColumns, loadingRef, error, setColumnWidth } = useLoadPhotos({});
   const [translated, setTranslated] = useState(false);
   const collectionsAndTopicsDivRef = useRef<HTMLDivElement | null>(null);
+  const [windowWidth, setWindowWidth] = useState<number>(0);
   const isXs = useIsScreenXs();
+
+  useEffect(() => {
+    setWindowWidth(window.innerWidth * 2 - 20 - 16);
+
+    const onResize = () => {
+      const width = window.innerWidth;
+      console.log(width);
+      setWindowWidth(width * 2 - 20 - 16);
+    };
+
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      window.removeEventListener("resize", onResize);
+    };
+  }, []);
 
   const handleClickSetaIr = () => {
     if (collectionsAndTopicsDivRef.current) {
@@ -67,7 +84,10 @@ const Home = () => {
         </button>
 
         <div
-          className={`flex gap-5 min-w-[966px] px-2 xl:px-0 sm:w-full sm:min-w-auto transition-transform relative items-center`}
+          className={`flex gap-5 px-2 xl:px-0 sm:w-full transition-transform relative items-center`}
+          style={{
+            minWidth: isXs ? `${windowWidth}px` : "10px",
+          }}
           ref={collectionsAndTopicsDivRef}
         >
           <CollectionList />
