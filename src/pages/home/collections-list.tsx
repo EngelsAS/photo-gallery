@@ -38,7 +38,7 @@ const CollectionList = () => {
                   <Photo
                     imageHeight={"52px"}
                     imageWidth={"52px"}
-                    objectCover="cover"
+                    objectFit="cover"
                     data={item.cover_photo!}
                     imageSrc={item.cover_photo!.urls.small}
                   />

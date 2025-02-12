@@ -15,7 +15,7 @@ interface PhotoProps {
   gradualLoading?: boolean;
   isFullScreen?: boolean;
   expandable?: boolean;
-  objectCover?: "cover" | "contain";
+  objectFit?: "cover" | "contain";
 }
 
 const Photo = ({
@@ -27,7 +27,7 @@ const Photo = ({
   gradualLoading,
   isFullScreen,
   expandable,
-  objectCover,
+  objectFit,
 }: PhotoProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [blurHeight, setBlurHeight] = useState(0);
@@ -122,8 +122,8 @@ const Photo = ({
       </div>
 
       <img
-        className={`${isLoaded ? "block" : "hidden"} w-full h-full object-${
-          objectCover ? objectCover : "contain"
+        className={`${isLoaded ? "block" : "hidden"} w-full h-full ${
+          objectFit === "cover" ? "object-cover" : "object-contain"
         }`}
         src={imageSrc}
       />
