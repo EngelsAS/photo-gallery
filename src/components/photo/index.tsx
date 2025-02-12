@@ -31,7 +31,7 @@ const Photo = ({
 }: PhotoProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [blurHeight, setBlurHeight] = useState(0);
-  const [gradualImagesUrls, setGradualImagesUrls] = useState<string[]>([]);
+  const [gradualImageLoaded, setGradualImageLoaded] = useState(false);
   const divRef = useRef<HTMLDivElement>(null);
 
   const handleResizeDiv = () => {
@@ -53,21 +53,18 @@ const Photo = ({
   }, [imageSrc]);
 
   useEffect(() => {
-    if (gradualLoading && data && imageSrc) {
-      const urls = Object.values(data.urls);
-      const imageSources = urls.filter((item) => item !== imageSrc);
+    if (gradualLoading && data) {
+      const url = data.urls.regular;
 
-      for (const src of imageSources) {
-        const img = new Image();
+      const img = new Image();
 
-        img.onload = () => {
-          setGradualImagesUrls((prev) => [...prev, src]);
-        };
+      img.onload = () => {
+        setGradualImageLoaded(true);
+      };
 
-        img.src = src;
-      }
+      img.src = url;
     }
-  }, [gradualLoading, data, imageSrc]);
+  }, [gradualLoading, data]);
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver(handleResizeDiv);
@@ -106,7 +103,7 @@ const Photo = ({
 
       <div
         className={`w-full h-full absolute ${
-          !isLoaded && gradualImagesUrls.length === 0 ? "block" : "hidden"
+          !isLoaded && !gradualImageLoaded ? "block" : "hidden"
         }`}
       >
         {data.blur_hash && (
@@ -131,9 +128,9 @@ const Photo = ({
       {gradualLoading && (
         <img
           className={`w-full h-full object-contain ${
-            !isLoaded && gradualImagesUrls.length > 0 ? "block" : "hidden"
+            !isLoaded && gradualImageLoaded ? "block" : "hidden"
           }`}
-          src={gradualImagesUrls[gradualImagesUrls.length - 1]}
+          src={data.urls.regular}
         />
       )}
 

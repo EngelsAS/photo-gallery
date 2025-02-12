@@ -135,18 +135,16 @@ const PhotoPage = () => {
         </div>
       </div>
 
-      {photoInfos && (
+      {photoInfos && isFullScreen && (
         <div
-          className={`absolute h-screen flex items-center lg:items-start top-0 left-0 right-0 cursor-zoom-out ${
-            !isFullScreen ? "pointer-events-none opacity-0 overflow-hidden" : ""
-          }`}
+          className={`absolute h-screen flex items-center lg:items-start top-0 left-0 right-0 cursor-zoom-out`}
           onClick={() => setIsFullScreen(false)}
         >
           <div className="fixed h-screen bg-black/45 w-screen"></div>
 
           <Photo
             data={photoInfos}
-            imageSrc={photoInfos?.urls.full}
+            imageSrc={photoInfos.urls.full}
             gradualLoading={true}
             isFullScreen={isFullScreen}
             expandable
