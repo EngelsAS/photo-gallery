@@ -12,8 +12,11 @@ import Test from "./pages/test";
 import CollectionPage from "./pages/collection-page";
 import Footer from "./components/footer";
 import TopicPage from "./pages/topic-page";
+import useScrollToTop from "./hooks/useScrollToTop";
 
 function App() {
+  useScrollToTop();
+
   const location = useLocation();
   const background = location.state && location.state.background;
   const isModalOpen = useIsModalOpen();
