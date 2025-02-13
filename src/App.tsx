@@ -7,7 +7,6 @@ import PhotoPage from "./pages/photo-page";
 import PhotoModal from "./components/photo-modal";
 import useIsModalOpen from "./hooks/useIsModalOpen";
 import { useEffect } from "react";
-import useIsScreenXs from "./hooks/useIsScreenXs";
 import Test from "./pages/test";
 import CollectionPage from "./pages/collection-page";
 import Footer from "./components/footer";
@@ -17,10 +16,9 @@ function App() {
   const location = useLocation();
   const background = location.state && location.state.background;
   const isModalOpen = useIsModalOpen();
-  const isXs = useIsScreenXs();
 
   useEffect(() => {
-    if (isModalOpen && !isXs) {
+    if (isModalOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
@@ -29,12 +27,12 @@ function App() {
     return () => {
       document.body.style.overflow = "";
     };
-  }, [isModalOpen, isXs]);
+  }, [isModalOpen]);
 
   return (
     <>
       <Header />
-      <Routes location={isXs ? location : background || location}>
+      <Routes location={background || location}>
         <Route path="/" element={<Home />} />
         <Route path="/search/:query" element={<Search />} />
         <Route path="/photo/:id" element={<PhotoPage />} />
@@ -42,7 +40,7 @@ function App() {
         <Route path="/topic/:slug" element={<TopicPage />} />
         <Route path="/test" element={<Test />} />
       </Routes>
-      {background && !isXs && (
+      {background && (
         <Routes>
           <Route
             path="/photo/:id"

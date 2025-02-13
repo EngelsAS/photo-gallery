@@ -8,6 +8,7 @@ import { checkDaysSincePublication } from "../../utils/check-days-since-publicat
 import { ArrowDownTrayIcon } from "@heroicons/react/24/outline";
 import { downloadImage } from "../../api/downloadImage";
 import LoadingButton from "../../components/loading-button";
+import StyledLink from "../../components/styled-link";
 
 const PhotoPage = () => {
   const { id } = useParams();
@@ -73,8 +74,10 @@ const PhotoPage = () => {
           {photoInfos && (
             <div>
               <p className="font-semibold">{photoInfos?.user.name}</p>
+
               <p className="text-xs text-zinc-500">
-                {generatePublicationDateText()}
+                {generatePublicationDateText()} no{" "}
+                <StyledLink href="https://unsplash.com/">Unplash</StyledLink>
               </p>
             </div>
           )}

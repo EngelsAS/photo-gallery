@@ -14,7 +14,7 @@ const PhotoModal = ({ children }: { children: ReactNode }) => {
         className="fixed inset-0 bg-black/45"
       ></div>
       <button
-        className="text-white/75 hover:text-white transition-colors cursor-pointer w-full md:fixed md:w-auto left-2"
+        className="text-white z-40 md:text-white/75 hover:text-white transition-colors cursor-pointer w-full md:fixed md:w-auto left-2"
         onClick={() => navigate(-1)}
       >
         <XMarkIcon className="size-8" />
