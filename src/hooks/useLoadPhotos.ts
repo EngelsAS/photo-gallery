@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Basic } from "unsplash-js/dist/methods/photos/types";
 import { divideArrayInThree } from "../utils/divide-array-in-three";
 import { getFeed } from "../api/getFeed";
@@ -16,7 +16,6 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
   const [columnWidth, setColumnWidth] = useState(0);
   const heightOfEachColumn = useRef<number[]>([]);
   const [totalReached, setTotalReached] = useState(false);
-  const isFirstLoad = useRef(true);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const totalPages = useRef<number>(-1);
 
@@ -24,103 +23,55 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
 
   const loadingRef = useRef<HTMLDivElement>(null);
 
-  const addNewPhotosOnList = (newItems: Basic[][]) => {
-    if (photoColumns.length === 0) {
-      setPhotoColumns(newItems);
-    } else {
-      if (heightOfEachColumn.current.length === 0) {
-        photoColumns.forEach((column) => {
-          const height = column.reduce((acc, value) => {
-            const newHeight = (value.height * columnWidth) / value.width;
-            return (acc += newHeight);
-          }, 0);
-
-          heightOfEachColumn.current.push(height);
-        });
-
-        console.log(heightOfEachColumn.current);
-      }
-
-      ///-------------------------------
-      const distributedList = JSON.parse(
-        JSON.stringify(photoColumns)
-      ) as Basic[][];
-      newItems.flat().forEach((item) => {
-        console.log("array de altura das colunas");
-        console.log(heightOfEachColumn.current);
-        const smallestColumnIndex = heightOfEachColumn.current.indexOf(
-          Math.min(...heightOfEachColumn.current)
-        );
-        console.log("indice com a menor altura");
-        console.log(smallestColumnIndex);
-        distributedList[smallestColumnIndex || 0].push(item);
-        const newHeight = (item.height * columnWidth) / item.width;
-        heightOfEachColumn.current[smallestColumnIndex || 0] += newHeight;
-      });
-      console.log(distributedList);
-      setPhotoColumns(distributedList);
-    }
-  };
-
   useEffect(() => {
+    console.log("coluna de fotos no useEffect");
+    console.log(photoColumns);
     if (photoColumns.length > 0) {
       setIsLoading(false);
+      feedPage.current += 1;
     }
   }, [photoColumns]);
 
-  useEffect(() => {
-    if (isLoading) {
-      if (isFirstLoad.current) {
-        isFirstLoad.current = false;
-      }
-      fetchFeed();
-    } else if (!isFirstLoad.current) {
-      feedPage.current += 1;
-    }
-    //eslint-disable-next-line
-  }, [isLoading]);
+  const addNewPhotosOnList = useCallback(
+    (newItems: Basic[][]) => {
+      console.log(photoColumns);
+      if (photoColumns.length === 0) {
+        console.log("ta zerado dnovo?");
+        setPhotoColumns(newItems);
+      } else {
+        if (heightOfEachColumn.current.length === 0) {
+          photoColumns.forEach((column) => {
+            const height = column.reduce((acc, value) => {
+              const newHeight = (value.height * columnWidth) / value.width;
+              return (acc += newHeight);
+            }, 0);
 
-  const handleObserver = () => {
-    if (totalPages.current !== -1 && feedPage.current >= totalPages.current) {
-      setTotalReached(true);
-    }
-
-    if (
-      !query ||
-      totalPages.current === -1 ||
-      feedPage.current <= totalPages.current
-    ) {
-      if (!isLoading) {
-        setIsLoading(true);
-      }
-    }
-  };
-
-  useEffect(() => {
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          handleObserver();
+            heightOfEachColumn.current.push(height);
+          });
         }
-      },
-      {
-        rootMargin: "1000px",
+
+        ///-------------------------------
+        const distributedList = JSON.parse(
+          JSON.stringify(photoColumns)
+        ) as Basic[][];
+        newItems.flat().forEach((item) => {
+          const smallestColumnIndex = heightOfEachColumn.current.indexOf(
+            Math.min(...heightOfEachColumn.current)
+          );
+          distributedList[smallestColumnIndex || 0].push(item);
+          const newHeight = (item.height * columnWidth) / item.width;
+          heightOfEachColumn.current[smallestColumnIndex || 0] += newHeight;
+        });
+
+        setPhotoColumns(distributedList);
       }
-    );
+    },
+    [columnWidth, photoColumns]
+  );
 
-    if (loadingRef.current) {
-      observerRef.current.observe(loadingRef.current);
-    }
+  const fetchFeed = useCallback(async () => {
+    setIsLoading(true);
 
-    if (observerRef.current) {
-      const observer = observerRef.current;
-      return () => observer.disconnect();
-    }
-
-    //eslint-disable-next-line
-  }, []);
-
-  const fetchFeed = async () => {
     let result: PhotosResponse;
     try {
       if (!query) {
@@ -137,9 +88,10 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
           result.photos.shift();
         }
         const splitedPhotos = divideArrayInThree(result.photos);
+        console.log("fotos no momento logo antes da adicao");
+        console.log(photoColumns);
         addNewPhotosOnList(splitedPhotos);
       } else if (result.error) {
-        setIsLoading(false);
         setError(result.error);
       }
     } catch (error) {
@@ -147,7 +99,43 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
       setIsLoading(false);
       setError("403");
     }
-  };
+  }, [addNewPhotosOnList, photoColumns, query]);
+
+  const handleObserver = useCallback(() => {
+    if (totalPages.current !== -1 && feedPage.current >= totalPages.current) {
+      setTotalReached(true);
+    }
+
+    if (
+      !query ||
+      totalPages.current === -1 ||
+      feedPage.current <= totalPages.current
+    ) {
+      fetchFeed();
+    }
+  }, [fetchFeed, query]);
+
+  useEffect(() => {
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting) && !isLoading) {
+          handleObserver();
+        }
+      },
+      {
+        rootMargin: "1000px",
+      }
+    );
+
+    if (loadingRef.current) {
+      observerRef.current.observe(loadingRef.current);
+    }
+
+    if (observerRef.current) {
+      const observer = observerRef.current;
+      return () => observer.disconnect();
+    }
+  }, [handleObserver, isLoading]);
 
   return {
     photoColumns,
