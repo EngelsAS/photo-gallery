@@ -19,10 +19,10 @@ const SearchView = ({ query }: { query: string }) => {
   return (
     <>
       <div>
-        <div className="max-w-7xl mx-auto my-10 font-bold text-3xl">
+        <div className="max-w-7xl mx-auto my-10 font-bold text-3xl px-2 xl:px-0">
           <h2>{capitalizeFirstLetter(query || "")}</h2>
         </div>
-        <div className="max-w-7xl mx-auto my-10 flex gap-3">
+        <div className="max-w-7xl mx-auto my-10 flex gap-3 flex-wrap md:flex-nowrap">
           <PhotoList columns={columns} setColumnWidth={setColumnWidth} />
         </div>
         {error && <ReqLimitError />}

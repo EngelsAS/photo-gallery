@@ -11,7 +11,7 @@ const PhotoModal = ({ children }: { children: ReactNode }) => {
         onClick={() => {
           navigate(-1);
         }}
-        className="h-full w-full bg-black/45 absolute top-0"
+        className="fixed inset-0 bg-black/45"
       ></div>
       <button
         className="text-white/75 hover:text-white transition-colors cursor-pointer w-full md:fixed md:w-auto left-2"

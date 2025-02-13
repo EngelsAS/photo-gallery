@@ -47,7 +47,7 @@ const CollectionPage = () => {
 
   return (
     <MainContainer>
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center px-2 xl:px-0">
         <div className="flex flex-col gap-4">
           <h1 className="text-5xl font-bold">
             {isLoading && !collectionInfos ? (
@@ -82,7 +82,7 @@ const CollectionPage = () => {
         </div>
       </div>
 
-      <div>
+      <div className="px-2 xl:px-0">
         {isLoading && !collectionInfos ? (
           <SkeletonLoading className="w-15 h-5" />
         ) : (
