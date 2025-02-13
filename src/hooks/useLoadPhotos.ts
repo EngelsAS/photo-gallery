@@ -24,8 +24,6 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
   const loadingRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    console.log("coluna de fotos no useEffect");
-    console.log(photoColumns);
     if (photoColumns.length > 0) {
       setIsLoading(false);
       feedPage.current += 1;
@@ -34,9 +32,7 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
 
   const addNewPhotosOnList = useCallback(
     (newItems: Basic[][]) => {
-      console.log(photoColumns);
       if (photoColumns.length === 0) {
-        console.log("ta zerado dnovo?");
         setPhotoColumns(newItems);
       } else {
         if (heightOfEachColumn.current.length === 0) {
@@ -88,8 +84,6 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
           result.photos.shift();
         }
         const splitedPhotos = divideArrayInThree(result.photos);
-        console.log("fotos no momento logo antes da adicao");
-        console.log(photoColumns);
         addNewPhotosOnList(splitedPhotos);
       } else if (result.error) {
         setError(result.error);
@@ -99,7 +93,7 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
       setIsLoading(false);
       setError("403");
     }
-  }, [addNewPhotosOnList, photoColumns, query]);
+  }, [addNewPhotosOnList, query]);
 
   const handleObserver = useCallback(() => {
     if (totalPages.current !== -1 && feedPage.current >= totalPages.current) {
