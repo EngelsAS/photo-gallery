@@ -47,13 +47,9 @@ const useLoadTopic = ({ slug }: useLoadTopicProps) => {
         JSON.stringify(photoColumns)
       ) as BasicPhotos[][];
       newItems.flat().forEach((item) => {
-        console.log("array de altura das colunas");
-        console.log(heightOfEachColumn.current);
         const smallestColumnIndex = heightOfEachColumn.current.indexOf(
           Math.min(...heightOfEachColumn.current)
         );
-        console.log("indice com a menor altura");
-        console.log(smallestColumnIndex);
         distributedList[smallestColumnIndex || 0].push(item);
         const newHeight = (item.height * columnWidth) / item.width;
         heightOfEachColumn.current[smallestColumnIndex || 0] += newHeight;
