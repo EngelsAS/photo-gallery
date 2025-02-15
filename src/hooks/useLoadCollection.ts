@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { divideArrayInThree } from "../utils/divide-array-in-three";
-import { getCollectionInfos } from "../api/getCollectionInfos";
 import { getCollectionPhotos } from "../api/getCollectionPhotos";
-import { Basic as BasicCollection } from "unsplash-js/dist/methods/collections/types";
 import { Basic as BasicPhotos } from "unsplash-js/dist/methods/photos/types";
 
 type useLoadCollectionProps = {
@@ -11,7 +9,6 @@ type useLoadCollectionProps = {
 
 const useLoadCollection = ({ id }: useLoadCollectionProps) => {
   const [photoColumns, setPhotoColumns] = useState<BasicPhotos[][]>([]);
-  const [collectionInfos, setCollectionInfos] = useState<BasicCollection>();
   const [isLoading, setIsLoading] = useState(false);
   const [columnWidth, setColumnWidth] = useState(0);
   const [error, setError] = useState<string | null>(null);
@@ -62,12 +59,6 @@ const useLoadCollection = ({ id }: useLoadCollectionProps) => {
       setPhotoColumns(distributedList);
     }
   };
-
-  useEffect(() => {
-    fetchCollectionInfos();
-
-    //eslint-disable-next-line
-  }, [id]);
 
   useEffect(() => {
     if (photoColumns.length > 0) {
@@ -141,17 +132,8 @@ const useLoadCollection = ({ id }: useLoadCollectionProps) => {
     }
   };
 
-  const fetchCollectionInfos = async () => {
-    const collectionInfos = await getCollectionInfos(id);
-
-    if (collectionInfos) {
-      setCollectionInfos(collectionInfos);
-    }
-  };
-
   return {
     photoColumns,
-    collectionInfos,
     error,
     loadingRef,
     isLoading,

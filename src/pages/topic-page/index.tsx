@@ -7,9 +7,12 @@ import PhotoList from "../../components/photo-list";
 import IntersectionDiv from "../../components/loading-card";
 import ReqLimitError from "../../components/req-limit-error";
 import useLoadTopic from "../../hooks/useLoadTopic";
+import useTopicPage from "../../hooks/useTopicPage";
 
 const TopicPage = () => {
   const { slug } = useParams();
+
+  const { topicInfos } = useTopicPage({ slug: slug! });
 
   const {
     isLoading,
@@ -18,7 +21,6 @@ const TopicPage = () => {
     totalReached,
     setColumnWidth,
     error,
-    topicInfos,
   } = useLoadTopic({ slug: slug! });
 
   if (!slug) {

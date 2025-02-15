@@ -9,19 +9,23 @@ import IntersectionDiv from "../../components/loading-card";
 import ReqLimitError from "../../components/req-limit-error";
 import BorderedButton from "../../components/bordered-button";
 import { useState } from "react";
+import useCollectionPage from "../../hooks/useCollectionPage";
 
 const CollectionPage = () => {
   const { id } = useParams();
 
+  const { collectionInfos } = useCollectionPage({
+    id: id!,
+  });
+
   const {
-    collectionInfos,
     isLoading,
     photoColumns,
     loadingRef,
     totalReached,
     setColumnWidth,
     error,
-  } = useLoadCollection({ id: id || "" });
+  } = useLoadCollection({ id: id! });
 
   const [copied, setCopied] = useState(false);
 

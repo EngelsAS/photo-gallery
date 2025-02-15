@@ -11,7 +11,6 @@ const Home = () => {
   return (
     <div className="max-w-7xl mx-auto flex flex-col gap-10 mt-10">
       <PopularTopicsAndCollections />
-
       <div className="flex gap-3 flex-wrap md:flex-nowrap">
         <PhotoList columns={photoColumns} setColumnWidth={setColumnWidth} />
       </div>

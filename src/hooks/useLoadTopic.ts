@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { divideArrayInThree } from "../utils/divide-array-in-three";
 import { Basic as BasicPhotos } from "unsplash-js/dist/methods/photos/types";
-import { getTopicInfos } from "../api/getTopicInfos";
-import { Basic as BasicTopic } from "unsplash-js/dist/methods/topics/types";
 import { getTopicPhotos } from "../api/getTopicPhotos";
 
 type useLoadTopicProps = {
@@ -11,7 +9,6 @@ type useLoadTopicProps = {
 
 const useLoadTopic = ({ slug }: useLoadTopicProps) => {
   const [photoColumns, setPhotoColumns] = useState<BasicPhotos[][]>([]);
-  const [topicInfos, setTopicInfos] = useState<BasicTopic>();
   const [isLoading, setIsLoading] = useState(false);
   const [columnWidth, setColumnWidth] = useState(0);
   const [error, setError] = useState<string | null>(null);
@@ -58,12 +55,6 @@ const useLoadTopic = ({ slug }: useLoadTopicProps) => {
       setPhotoColumns(distributedList);
     }
   };
-
-  useEffect(() => {
-    fetchtopicInfos();
-
-    //eslint-disable-next-line
-  }, [slug]);
 
   useEffect(() => {
     if (photoColumns.length > 0) {
@@ -137,17 +128,8 @@ const useLoadTopic = ({ slug }: useLoadTopicProps) => {
     }
   };
 
-  const fetchtopicInfos = async () => {
-    const topicInfos = await getTopicInfos(slug);
-
-    if (topicInfos) {
-      setTopicInfos(topicInfos);
-    }
-  };
-
   return {
     photoColumns,
-    topicInfos,
     error,
     loadingRef,
     isLoading,
