@@ -1,4 +1,4 @@
-# Unsplash API Clone - Projeto Educacional
+# Photo Gallery - Unsplash Clone
 
 Este projeto é um clone do site Unsplash API, desenvolvido com o objetivo educacional de estudar e aplicar técnicas de otimização de performance e carregamento de imagens.
 
