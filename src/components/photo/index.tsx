@@ -5,6 +5,7 @@ import {
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { Blurhash } from "react-blurhash";
 import { Basic } from "unsplash-js/dist/methods/photos/types";
+import useIsScreenXs from "../../hooks/useIsScreenXs";
 
 interface PhotoProps {
   data: Basic;
@@ -32,6 +33,7 @@ const Photo = ({
   const [isLoaded, setIsLoaded] = useState(false);
   const [blurHeight, setBlurHeight] = useState(0);
   const [gradualImageLoaded, setGradualImageLoaded] = useState(false);
+  const isXs = useIsScreenXs();
   const divRef = useRef<HTMLDivElement>(null);
 
   const handleResizeDiv = () => {
@@ -83,7 +85,11 @@ const Photo = ({
   return (
     <div
       className={`w-full relative ${
-        isFullScreen ? "cursor-zoom-out" : "cursor-zoom-in"
+        isFullScreen
+          ? "cursor-zoom-out"
+          : !isXs
+          ? "cursor-zoom-in"
+          : "cursor-auto"
       }`}
       ref={divRef}
       style={{

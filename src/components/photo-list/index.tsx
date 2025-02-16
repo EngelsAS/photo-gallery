@@ -1,6 +1,6 @@
 import { Basic } from "unsplash-js/dist/methods/photos/types";
 import Photo from "../photo";
-import { Link, useLocation } from "react-router";
+import { Location, useLocation, useNavigate } from "react-router";
 import PhotoUsernameHover from "../photo-username-hover";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import useIsScreenXs from "../../hooks/useIsScreenXs";
@@ -25,6 +25,7 @@ const PhotoList = ({ columns, setColumnWidth }: PhotoListProps) => {
   const columnRef = useRef<HTMLDivElement>(null);
   const resizeRef = useRef<ResizeObserver | null>(null);
   const isXs = useIsScreenXs();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (columnRef.current && setColumnWidth) {
@@ -70,6 +71,12 @@ const PhotoList = ({ columns, setColumnWidth }: PhotoListProps) => {
     }
   };
 
+  const hadleClickImage = (imageId: string, location: Location) => {
+    if (!isXs) {
+      navigate(`/photo/${imageId}`, { state: { background: location } });
+    }
+  };
+
   return (
     <>
       {columns.map((internArray, indexMainArray) => (
@@ -97,10 +104,9 @@ const PhotoList = ({ columns, setColumnWidth }: PhotoListProps) => {
                 </div>
               </div>
 
-              <Link
-                to={`/photo/${item.id}`}
-                target={isXs ? "_blank" : "_self"}
-                state={{ background: location }}
+              <button
+                className="h-auto w-full"
+                onClick={() => hadleClickImage(item.id, location)}
               >
                 <Photo data={item} imageSrc={item.urls.regular}>
                   {!isXs && (
@@ -110,7 +116,7 @@ const PhotoList = ({ columns, setColumnWidth }: PhotoListProps) => {
                     />
                   )}
                 </Photo>
-              </Link>
+              </button>
 
               <div className="flex sm:hidden justify-between p-2 items-center">
                 <div className="flex items-center">
