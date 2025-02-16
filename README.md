@@ -14,14 +14,12 @@ O projeto foi construído utilizando React Js e implementa as seguintes otimiza�
 
 ## Demonstração
 
-[Adicione aqui um link para a demonstração do projeto]
+[Photo Gallery](https://photo-gallery-self.vercel.app/)
 
 ## Tecnologias Utilizadas
 
 - React Js
 - Tailwind CSS
-- Blurhash
-- [Adicione outras tecnologias/bibliotecas relevantes]
 
 ## Como Executar o Projeto
 
@@ -68,5 +66,5 @@ Este é um projeto educacional, portanto, contribuições não são o foco princ
 
 ## Autor
 
-- [Engels Antero da Silva]
+- Engels Antero da Silva
 - [LinkedIn](https://www.linkedin.com/in/engels-antero-9a34b2226/)
