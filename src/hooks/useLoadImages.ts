@@ -74,7 +74,8 @@ const useLoadImages = ({ fetchData }: useLoadImagesProps) => {
       const resp = await fetchData(feedPage.current);
 
       if (resp.type === "success") {
-        if (resp.total) {
+        console.log(resp.total);
+        if (resp.total || resp.total === 0) {
           totalPages.current = Math.ceil(resp.total / 9);
         }
 
