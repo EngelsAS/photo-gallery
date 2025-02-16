@@ -1,50 +1,72 @@
-# React + TypeScript + Vite
+# Unsplash API Clone - Projeto Educacional
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este projeto é um clone do site Unsplash API, desenvolvido com o objetivo educacional de estudar e aplicar técnicas de otimização de performance e carregamento de imagens.
 
-Currently, two official plugins are available:
+## Visão Geral
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+O projeto foi construído utilizando React Js e implementa as seguintes otimizações:
 
-## Expanding the ESLint configuration
+- **Blurhash:** Utilização da biblioteca Blurhash para exibir um blurPlaceholder enquanto as imagens são carregadas, melhorando a percepção de carregamento.
+- **Carregamento de Imagem Gradual:** Implementação de carregamento gradual de imagens para garantir uma boa experiência para usuários com conexões de internet mais lentas.
+- **Infinite Scroll:** Implementação de rolagem infinita para carregar imagens conforme o usuário interage com a página, otimizando o uso de dados e a performance.
+- **Responsividade:** Design responsivo para garantir a compatibilidade e a usabilidade em diversos dispositivos.
+- **Tailwind CSS:** Utilização do Tailwind CSS para estilização, garantindo a consistência e a facilidade de manutenção do design.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Demonstração
 
-- Configure the top-level `parserOptions` property like this:
+[Adicione aqui um link para a demonstração do projeto]
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Tecnologias Utilizadas
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+- React Js
+- Tailwind CSS
+- Blurhash
+- [Adicione outras tecnologias/bibliotecas relevantes]
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Como Executar o Projeto
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+Siga as instruções abaixo para executar o projeto localmente:
+
+1.  Clone o repositório:
+
+    ```
+    git clone https://github.com/EngelsAS/photo-gallery.git
+    ```
+
+2.  Navegue até o diretório do projeto:
+
+    ```
+    cd photo-gallery
+    ```
+
+3.  Instale as dependências:
+
+    ```
+    npm install ou yarn install
+    ```
+
+4.  Configure o arquivo `.env` com sua chave de acesso da Unsplash API:
+
+    - Crie um arquivo chamado `.env` na raiz do projeto.
+    - Adicione a seguinte linha, criando a variavel de ambiente `VITE_UNSPLASH_ACCESS_KEY` e atribua sua chave de acesso real:
+
+      ```
+      VITE_UNSPLASH_ACCESS_KEY=SUA_CHAVE_DE_ACESSO
+      ```
+
+5.  Inicie o servidor de desenvolvimento:
+
+    ```
+    npm run dev ou yarn dev
+    ```
+
+6.  Abra o seu navegador e acesse `http://localhost:3000` ou a porta que for especificada no terminal.
+
+## Contribuição
+
+Este é um projeto educacional, portanto, contribuições não são o foco principal. No entanto, se você tiver sugestões de melhorias ou correções, sinta-se à vontade para abrir uma issue ou enviar um pull request.
+
+## Autor
+
+- [Engels Antero da Silva]
+- [LinkedIn](https://www.linkedin.com/in/engels-antero-9a34b2226/)
