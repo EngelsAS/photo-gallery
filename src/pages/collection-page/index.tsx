@@ -1,7 +1,6 @@
 import { Link, useParams } from "react-router";
 import Avatar from "../../components/avatar";
 import MainContainer from "../../components/main-container";
-import useLoadCollection from "../../hooks/useLoadCollection";
 import SkeletonLoading from "../../components/skeleton-loading";
 import { LinkIcon } from "@heroicons/react/24/outline";
 import PhotoList from "../../components/photo-list";
@@ -10,6 +9,8 @@ import ReqLimitError from "../../components/req-limit-error";
 import BorderedButton from "../../components/bordered-button";
 import { useState } from "react";
 import useCollectionPage from "../../hooks/useCollectionPage";
+import useLoadImages from "../../hooks/useLoadImages";
+import { getCollectionPhotos } from "../../api/getCollectionPhotos";
 
 const CollectionPage = () => {
   const { id } = useParams();
@@ -25,7 +26,9 @@ const CollectionPage = () => {
     totalReached,
     setColumnWidth,
     error,
-  } = useLoadCollection({ id: id! });
+  } = useLoadImages({
+    fetchData: (page: number) => getCollectionPhotos(id!, page),
+  });
 
   const [copied, setCopied] = useState(false);
 
@@ -34,7 +37,7 @@ const CollectionPage = () => {
       const url = window.location.href;
       await navigator.clipboard.writeText(url);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000); // Reseta o status depois de 2s
+      setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       console.error("Erro ao copiar:", err);
     }

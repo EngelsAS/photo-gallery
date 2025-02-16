@@ -6,8 +6,9 @@ import { LinkIcon } from "@heroicons/react/24/outline";
 import PhotoList from "../../components/photo-list";
 import IntersectionDiv from "../../components/loading-card";
 import ReqLimitError from "../../components/req-limit-error";
-import useLoadTopic from "../../hooks/useLoadTopic";
 import useTopicPage from "../../hooks/useTopicPage";
+import useLoadImages from "../../hooks/useLoadImages";
+import { getTopicPhotos } from "../../api/getTopicPhotos";
 
 const TopicPage = () => {
   const { slug } = useParams();
@@ -21,7 +22,9 @@ const TopicPage = () => {
     totalReached,
     setColumnWidth,
     error,
-  } = useLoadTopic({ slug: slug! });
+  } = useLoadImages({
+    fetchData: (page: number) => getTopicPhotos(slug!, page),
+  });
 
   if (!slug) {
     return (

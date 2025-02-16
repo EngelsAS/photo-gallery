@@ -1,9 +1,10 @@
 import PhotoList from "../../components/photo-list";
-import useLoadPhotos from "../../hooks/useLoadPhotos";
 import IntersectionDiv from "../../components/loading-card";
 import { capitalizeFirstLetter } from "../../utils/capitalize-first-letter";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import ReqLimitError from "../../components/req-limit-error";
+import useLoadImages from "../../hooks/useLoadImages";
+import { getQuery } from "../../api/query";
 
 const SearchView = ({ query }: { query: string }) => {
   const {
@@ -12,8 +13,8 @@ const SearchView = ({ query }: { query: string }) => {
     error,
     totalReached,
     setColumnWidth,
-  } = useLoadPhotos({
-    query: query || "",
+  } = useLoadImages({
+    fetchData: (page: number) => getQuery(query, page),
   });
 
   return (

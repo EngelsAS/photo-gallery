@@ -1,15 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Basic } from "unsplash-js/dist/methods/photos/types";
 import { divideArrayInThree } from "../utils/divide-array-in-three";
-import { getFeed } from "../api/getFeed";
-import { getQuery } from "../api/query";
-import { PhotosResponse } from "../types/photos-response";
+import { Basic } from "unsplash-js/dist/methods/photos/types";
 
-type useLoadPhotosProps = {
-  query?: string;
+type useLoadImagesProps = {
+  fetchData: (
+    page: number
+  ) => Promise<
+    | { type: "error"; error?: string }
+    | { type: "success"; photos?: Basic[]; total?: number }
+  >;
 };
 
-const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
+const useLoadImages = ({ fetchData }: useLoadImagesProps) => {
   const [photoColumns, setPhotoColumns] = useState<Basic[][]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -68,46 +70,41 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
   const fetchFeed = useCallback(async () => {
     setIsLoading(true);
 
-    let result: PhotosResponse;
     try {
-      if (!query) {
-        result = await getFeed(feedPage.current);
-      } else {
-        result = await getQuery(query, feedPage.current);
-      }
+      const resp = await fetchData(feedPage.current);
 
-      if (result.photos) {
-        if (query) {
-          totalPages.current = result.total_pages || 0;
+      if (resp.type === "success") {
+        if (resp.total) {
+          totalPages.current = Math.ceil(resp.total / 9);
         }
-        if (feedPage.current > 1) {
-          result.photos.shift();
+
+        if (feedPage.current > 1 && resp.photos) {
+          resp.photos.shift();
         }
-        const splitedPhotos = divideArrayInThree(result.photos);
-        addNewPhotosOnList(splitedPhotos);
-      } else if (result.error) {
-        setError(result.error);
+
+        if (resp.photos) {
+          const splitedPhotos = divideArrayInThree(resp.photos);
+          addNewPhotosOnList(splitedPhotos);
+        }
+      } else if (resp.error) {
+        setError(resp.error);
       }
     } catch (error) {
       console.log(error);
       setIsLoading(false);
       setError("403");
     }
-  }, [addNewPhotosOnList, query]);
+  }, [addNewPhotosOnList, fetchData]);
 
   const handleObserver = useCallback(() => {
     if (totalPages.current !== -1 && feedPage.current >= totalPages.current) {
       setTotalReached(true);
     }
 
-    if (
-      !query ||
-      totalPages.current === -1 ||
-      feedPage.current <= totalPages.current
-    ) {
+    if (totalPages.current === -1 || feedPage.current <= totalPages.current) {
       fetchFeed();
     }
-  }, [fetchFeed, query]);
+  }, [fetchFeed]);
 
   useEffect(() => {
     observerRef.current = new IntersectionObserver(
@@ -141,4 +138,4 @@ const useLoadPhotos = ({ query }: useLoadPhotosProps) => {
   };
 };
 
-export default useLoadPhotos;
+export default useLoadImages;
