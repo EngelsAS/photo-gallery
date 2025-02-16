@@ -119,7 +119,7 @@ const PhotoList = ({ columns, setColumnWidth }: PhotoListProps) => {
               </button>
 
               <div className="flex sm:hidden justify-between p-2 items-center">
-                <div className="flex items-center">
+                <div className="flex items-center text-zinc-500">
                   <HeartIcon className="size-6" />
                   <p>{item.likes}</p>
                 </div>

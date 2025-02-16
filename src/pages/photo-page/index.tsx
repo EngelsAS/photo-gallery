@@ -154,7 +154,7 @@ const PhotoPage = () => {
           </div>
         )}
 
-        <div className="hidden md:flex items-center">
+        <div className="hidden md:flex items-center text-zinc-500">
           <HeartIcon className="size-6" />
           <p>{photoInfos?.likes}</p>
         </div>
