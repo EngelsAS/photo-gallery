@@ -1,5 +1,4 @@
 import { Link, useParams } from "react-router";
-import BorderedBox from "../../components/bordered-box";
 import MainContainer from "../../components/main-container";
 import SkeletonLoading from "../../components/skeleton-loading";
 import { LinkIcon } from "@heroicons/react/24/outline";
@@ -9,6 +8,7 @@ import ReqLimitError from "../../components/req-limit-error";
 import useTopicPage from "../../hooks/useTopicPage";
 import useLoadImages from "../../hooks/useLoadImages";
 import { getTopicPhotos } from "../../api/getTopicPhotos";
+import ShareButton from "../../components/share-button";
 
 const TopicPage = () => {
   const { slug } = useParams();
@@ -54,13 +54,13 @@ const TopicPage = () => {
             )}
           </div>
         </div>
-        <div>
-          <BorderedBox className="py-2 px-3 text-zinc-500 flex gap-2 cursor-pointer hover:text-black hover:border-black transition-colors shadow">
-            <LinkIcon className="size-6" />
+        <ShareButton url={window.location.href}>
+          <div className="flex gap-2 items-center p-2">
+            <LinkIcon className="size-7" />
 
             <p className="font-semibold">Compartilhar</p>
-          </BorderedBox>
-        </div>
+          </div>
+        </ShareButton>
       </div>
 
       <div className="px-2 xl:px-0">

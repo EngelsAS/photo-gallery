@@ -5,9 +5,14 @@ import PhotoUsernameHover from "../photo-username-hover";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import useIsScreenXs from "../../hooks/useIsScreenXs";
 import Avatar from "../avatar";
-import { ArrowDownTrayIcon, HeartIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowDownTrayIcon,
+  HeartIcon,
+  LinkIcon,
+} from "@heroicons/react/24/outline";
 import { downloadImage } from "../../api/downloadImage";
 import LoadingButton from "../loading-button";
+import ShareButton from "../share-button";
 
 interface PhotoListProps {
   columns: Basic[][];
@@ -75,7 +80,7 @@ const PhotoList = ({ columns, setColumnWidth }: PhotoListProps) => {
         >
           {internArray.map((item, internArrayIndex) => (
             <div key={internArrayIndex}>
-              <div className="flex sm:hidden p-2  gap-3 items-center">
+              <div className="flex sm:hidden p-2 gap-3 items-center">
                 <Avatar src={item.user.profile_image.medium} />
                 <div>
                   <p className="font-semibold">{item.user.name}</p>
@@ -92,7 +97,11 @@ const PhotoList = ({ columns, setColumnWidth }: PhotoListProps) => {
                 </div>
               </div>
 
-              <Link to={`/photo/${item.id}`} state={{ background: location }}>
+              <Link
+                to={`/photo/${item.id}`}
+                target={isXs ? "_blank" : "_self"}
+                state={{ background: location }}
+              >
                 <Photo data={item} imageSrc={item.urls.regular}>
                   {!isXs && (
                     <PhotoUsernameHover
@@ -108,14 +117,28 @@ const PhotoList = ({ columns, setColumnWidth }: PhotoListProps) => {
                   <HeartIcon className="size-6" />
                   <p>{item.likes}</p>
                 </div>
-                <LoadingButton
-                  onClick={() =>
-                    handleDownload(item.links.download_location, item.id)
-                  }
-                  isLoading={isLoadingDownload}
-                >
-                  <ArrowDownTrayIcon className="size-7" />
-                </LoadingButton>
+                <div className="flex gap-2">
+                  <div>
+                    <ShareButton
+                      url={`${window.location.origin}/photo/${item.id}`}
+                    >
+                      <div className="flex gap-2 items-center px-2">
+                        <LinkIcon className="size-7" />
+
+                        <p className="font-semibold">Compartilhar</p>
+                      </div>
+                    </ShareButton>
+                  </div>
+
+                  <LoadingButton
+                    onClick={() =>
+                      handleDownload(item.links.download_location, item.id)
+                    }
+                    isLoading={isLoadingDownload}
+                  >
+                    <ArrowDownTrayIcon className="size-7" />
+                  </LoadingButton>
+                </div>
               </div>
             </div>
           ))}

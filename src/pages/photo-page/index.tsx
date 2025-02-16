@@ -5,10 +5,15 @@ import { Full } from "unsplash-js/dist/methods/photos/types";
 import Avatar from "../../components/avatar";
 import Photo from "../../components/photo";
 import { checkDaysSincePublication } from "../../utils/check-days-since-publication";
-import { ArrowDownTrayIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowDownTrayIcon,
+  HeartIcon,
+  LinkIcon,
+} from "@heroicons/react/24/outline";
 import { downloadImage } from "../../api/downloadImage";
 import LoadingButton from "../../components/loading-button";
 import StyledLink from "../../components/styled-link";
+import ShareButton from "../../components/share-button";
 
 const PhotoPage = () => {
   const { id } = useParams();
@@ -66,72 +71,94 @@ const PhotoPage = () => {
   };
 
   return (
-    <div className="p-3 flex flex-col gap-3 lg:h-full">
-      <div className="flex items-center justify-between">
-        <div className="flex gap-3">
-          <Avatar src={photoInfos?.user.profile_image.medium} />
+    <div className="h-full">
+      <div className="p-3 flex flex-col gap-3 lg:h-full">
+        <div className="flex items-center justify-between">
+          <div className="flex gap-3">
+            <Avatar src={photoInfos?.user.profile_image.medium} />
 
-          {photoInfos && (
+            {photoInfos && (
+              <div>
+                <p className="font-semibold">{photoInfos?.user.name}</p>
+
+                <p className="text-xs text-zinc-500">
+                  {generatePublicationDateText()} no{" "}
+                  <StyledLink href="https://unsplash.com/">Unplash</StyledLink>
+                </p>
+              </div>
+            )}
+
+            {!photoInfos && (
+              <div className="flex flex-col gap-1">
+                <div className="bg-zinc-200 animate-pulse w-15 h-2"></div>
+                <div className="bg-zinc-200 animate-pulse w-10 h-2"></div>
+              </div>
+            )}
+          </div>
+
+          <div className="flex gap-3">
             <div>
-              <p className="font-semibold">{photoInfos?.user.name}</p>
+              <ShareButton url={window.location.href}>
+                <div className="flex gap-2 items-center px-2">
+                  <LinkIcon className="size-7" />
 
-              <p className="text-xs text-zinc-500">
-                {generatePublicationDateText()} no{" "}
-                <StyledLink href="https://unsplash.com/">Unplash</StyledLink>
-              </p>
+                  <p className="font-semibold">Compartilhar</p>
+                </div>
+              </ShareButton>
             </div>
-          )}
 
-          {!photoInfos && (
-            <div className="flex flex-col gap-1">
-              <div className="bg-zinc-200 animate-pulse w-15 h-2"></div>
-              <div className="bg-zinc-200 animate-pulse w-10 h-2"></div>
-            </div>
-          )}
-        </div>
-
-        <LoadingButton onClick={handleDownload} isLoading={isLoadingDownload}>
-          <ArrowDownTrayIcon className="size-7" />
-        </LoadingButton>
-      </div>
-
-      <div className="w-full h-full flex overflow-hidden" ref={divRef}>
-        <div className="mx-auto max-w-full">
-          {photoInfos && (
-            <div
-              onClick={() => {
-                setIsFullScreen(true);
-              }}
-              className="h-full w-full pointer-events-none md:pointer-events-auto"
+            <LoadingButton
+              onClick={handleDownload}
+              isLoading={isLoadingDownload}
             >
-              <Photo
-                data={photoInfos}
-                imageSrc={photoInfos.urls.regular}
-                imageHeight="100%"
-                imageWidth={imageWidth}
-                expandable
-              />
-            </div>
-          )}
+              <ArrowDownTrayIcon className="size-7" />
+            </LoadingButton>
+          </div>
+        </div>
+
+        <div className="w-full h-full flex overflow-hidden" ref={divRef}>
+          <div className="mx-auto max-w-full">
+            {photoInfos && (
+              <div
+                onClick={() => {
+                  setIsFullScreen(true);
+                }}
+                className="h-full w-full pointer-events-none md:pointer-events-auto"
+              >
+                <Photo
+                  data={photoInfos}
+                  imageSrc={photoInfos.urls.regular}
+                  imageHeight="100%"
+                  imageWidth={imageWidth}
+                  expandable
+                />
+              </div>
+            )}
+          </div>
+        </div>
+
+        {photoInfos && isFullScreen && (
+          <div
+            className={`absolute h-screen flex items-center lg:items-start top-0 left-0 right-0 cursor-zoom-out`}
+            onClick={() => setIsFullScreen(false)}
+          >
+            <div className="fixed h-screen bg-black/45 w-screen"></div>
+
+            <Photo
+              data={photoInfos}
+              imageSrc={photoInfos.urls.full}
+              gradualLoading={true}
+              isFullScreen={isFullScreen}
+              expandable
+            />
+          </div>
+        )}
+
+        <div className="hidden md:flex items-center">
+          <HeartIcon className="size-6" />
+          <p>{photoInfos?.likes}</p>
         </div>
       </div>
-
-      {photoInfos && isFullScreen && (
-        <div
-          className={`absolute h-screen flex items-center lg:items-start top-0 left-0 right-0 cursor-zoom-out`}
-          onClick={() => setIsFullScreen(false)}
-        >
-          <div className="fixed h-screen bg-black/45 w-screen"></div>
-
-          <Photo
-            data={photoInfos}
-            imageSrc={photoInfos.urls.full}
-            gradualLoading={true}
-            isFullScreen={isFullScreen}
-            expandable
-          />
-        </div>
-      )}
     </div>
   );
 };

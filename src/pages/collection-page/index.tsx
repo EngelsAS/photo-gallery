@@ -6,11 +6,10 @@ import { LinkIcon } from "@heroicons/react/24/outline";
 import PhotoList from "../../components/photo-list";
 import IntersectionDiv from "../../components/loading-card";
 import ReqLimitError from "../../components/req-limit-error";
-import BorderedButton from "../../components/bordered-button";
-import { useState } from "react";
 import useCollectionPage from "../../hooks/useCollectionPage";
 import useLoadImages from "../../hooks/useLoadImages";
 import { getCollectionPhotos } from "../../api/getCollectionPhotos";
+import ShareButton from "../../components/share-button";
 
 const CollectionPage = () => {
   const { id } = useParams();
@@ -29,19 +28,6 @@ const CollectionPage = () => {
   } = useLoadImages({
     fetchData: (page: number) => getCollectionPhotos(id!, page),
   });
-
-  const [copied, setCopied] = useState(false);
-
-  const handleCopyLink = async () => {
-    try {
-      const url = window.location.href;
-      await navigator.clipboard.writeText(url);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error("Erro ao copiar:", err);
-    }
-  };
 
   if (!id) {
     return (
@@ -72,21 +58,14 @@ const CollectionPage = () => {
             )}
           </div>
         </div>
-        <div className="relative">
-          <BorderedButton onClick={handleCopyLink}>
-            <LinkIcon className="size-6" />
+
+        <ShareButton url={window.location.href}>
+          <div className="flex gap-2 items-center p-2">
+            <LinkIcon className="size-7" />
 
             <p className="font-semibold">Compartilhar</p>
-          </BorderedButton>
-
-          <div
-            className={`absolute -bottom-9 whitespace-nowrap text-zinc-500 font-semibold bg-white rounded-md px-2 py-1 shadow transition-opacity ${
-              copied ? "opacity-100" : "opacity-0 pointer-events-none"
-            }`}
-          >
-            Link copiado!
           </div>
-        </div>
+        </ShareButton>
       </div>
 
       <div className="px-2 xl:px-0">
