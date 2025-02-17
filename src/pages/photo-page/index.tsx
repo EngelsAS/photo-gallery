@@ -139,11 +139,10 @@ const PhotoPage = () => {
 
         {photoInfos && isFullScreen && (
           <div
-            className={`absolute h-screen flex items-center lg:items-start top-0 left-0 right-0 cursor-zoom-out`}
+            className={`absolute h-screen flex items-center lg:items-start top-0 left-0 right-0 cursor-zoom-out bg-white`}
             onClick={() => setIsFullScreen(false)}
           >
-            <div className="fixed h-screen bg-black/45 w-screen"></div>
-
+            {/* <div className="fixed h-screen bg-black/45 w-screen"></div> */}
             <Photo
               data={photoInfos}
               imageSrc={photoInfos.urls.full}
@@ -151,6 +150,7 @@ const PhotoPage = () => {
               isFullScreen={isFullScreen}
               expandable
             />
+            {/* <img src={photoInfos.urls.full} /> */}
           </div>
         )}
 

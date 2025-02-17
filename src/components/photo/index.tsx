@@ -98,7 +98,7 @@ const Photo = ({
       }}
     >
       {expandable && (
-        <div className="absolute p-3 h-full w-full flex justify-end opacity-0 hover:opacity-100 transition-opacity">
+        <div className="absolute p-3 h-full w-full flex justify-end opacity-0 hover:opacity-100 transition-opacity z-50">
           {!isFullScreen ? (
             <ArrowsPointingOutIcon className="size-7 text-white" />
           ) : (
@@ -125,7 +125,10 @@ const Photo = ({
       </div>
 
       <img
-        className={`${isLoaded ? "block" : "hidden"} w-full h-full ${
+        loading="lazy"
+        className={`${
+          isLoaded ? "opacity-100" : "opacity-0 absolute"
+        } w-full h-full ${
           objectFit === "cover" ? "object-cover" : "object-contain"
         }`}
         src={imageSrc}
@@ -133,8 +136,11 @@ const Photo = ({
 
       {gradualLoading && (
         <img
+          loading="lazy"
           className={`w-full h-full object-contain ${
-            !isLoaded && gradualImageLoaded ? "block" : "hidden"
+            !isLoaded && gradualImageLoaded
+              ? "opacity-100"
+              : "opacity-0 absolute top-0"
           }`}
           src={data.urls.regular}
         />
