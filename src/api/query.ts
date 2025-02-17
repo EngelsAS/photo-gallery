@@ -2,25 +2,35 @@ import { PhotosResponse } from "../types/photos-response";
 import { unsplash } from "./unsplash";
 
 export const getQuery = async (query: string, page: number) => {
-  const result = await unsplash.search.getPhotos({
+  const resp = await unsplash.search.getPhotos({
     query: query,
     page: page,
     perPage: 9,
     orderBy: "relevant",
   });
-  console.log(result);
+  console.log(resp);
 
-  if (result.type === "error") {
+  if (resp.type === "error") {
     return {
       type: "error",
-      error: result.errors[0],
+      error: resp.errors[0],
     } as PhotosResponse;
   }
 
+  const photos = resp.response.results.map((item) => ({
+    ...item,
+    urls: Object.fromEntries(
+      Object.entries(item.urls).map(([key, url]) => [
+        key,
+        url.replace("fm=jpg", "fm=webp"),
+      ])
+    ),
+  }));
+
   return {
     type: "success",
-    total: result.response.total,
-    total_pages: result.response.total_pages,
-    photos: result.response.results,
+    total: resp.response.total,
+    total_pages: resp.response.total_pages,
+    photos: photos,
   } as PhotosResponse;
 };

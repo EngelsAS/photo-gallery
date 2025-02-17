@@ -11,8 +11,18 @@ export const getFeed = async (page: number) => {
     } as PhotosResponse;
   }
 
+  const photos = result.response.results.map((item) => ({
+    ...item,
+    urls: Object.fromEntries(
+      Object.entries(item.urls).map(([key, url]) => [
+        key,
+        url.replace("fm=jpg", "fm=webp"),
+      ])
+    ),
+  }));
+
   return {
     type: "success",
-    photos: result.response.results,
+    photos: photos,
   } as PhotosResponse;
 };

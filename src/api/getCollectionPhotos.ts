@@ -1,3 +1,4 @@
+import { Basic } from "unsplash-js/dist/methods/photos/types";
 import { PhotosResponse } from "../types/photos-response";
 import { unsplash } from "./unsplash";
 
@@ -8,8 +9,6 @@ export const getCollectionPhotos = async (id: string, page: number) => {
     perPage: 9,
   });
 
-  console.log(resp);
-
   if (resp.type === "error") {
     return {
       type: "error",
@@ -17,9 +16,19 @@ export const getCollectionPhotos = async (id: string, page: number) => {
     } as PhotosResponse;
   }
 
+  const photos = (resp.response.results as Basic[]).map((item) => ({
+    ...item,
+    urls: Object.fromEntries(
+      Object.entries(item.urls).map(([key, url]) => [
+        key,
+        url.replace("fm=jpg", "fm=webp"),
+      ])
+    ),
+  }));
+
   return {
     type: "success",
-    photos: resp.response.results,
+    photos: photos,
     total: resp.response.total,
   } as PhotosResponse;
 };

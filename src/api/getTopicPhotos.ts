@@ -17,9 +17,19 @@ export const getTopicPhotos = async (slug: string, page: number) => {
     } as PhotosResponse;
   }
 
+  const photos = resp.response.results.map((item) => ({
+    ...item,
+    urls: Object.fromEntries(
+      Object.entries(item.urls).map(([key, url]) => [
+        key,
+        url.replace("fm=jpg", "fm=webp"),
+      ])
+    ),
+  }));
+
   return {
     type: "success",
-    photos: resp.response.results,
+    photos: photos,
     total: resp.response.total,
   } as PhotosResponse;
 };
