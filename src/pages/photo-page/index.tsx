@@ -139,7 +139,7 @@ const PhotoPage = () => {
 
         {photoInfos && isFullScreen && (
           <div
-            className={`absolute h-screen flex items-center lg:items-start top-0 left-0 right-0 cursor-zoom-out bg-white`}
+            className={`absolute h-screen flex items-center lg:items-start top-0 left-0 right-0 cursor-zoom-out`}
             onClick={() => setIsFullScreen(false)}
           >
             {/* <div className="fixed h-screen bg-black/45 w-screen"></div> */}
