@@ -8,8 +8,6 @@ export const getTopicPhotos = async (slug: string, page: number) => {
     perPage: 9,
   });
 
-  console.log(resp);
-
   if (resp.type === "error") {
     return {
       type: "error",

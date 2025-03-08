@@ -4,8 +4,6 @@ import { Full } from "unsplash-js/dist/methods/photos/types";
 export const getPhotoInfos = async (id: string) => {
   const result = await unsplash.photos.get({ photoId: id });
 
-  console.log(result);
-
   if (result.type === "error") {
     return;
   }

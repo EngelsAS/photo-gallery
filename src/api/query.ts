@@ -8,7 +8,6 @@ export const getQuery = async (query: string, page: number) => {
     perPage: 9,
     orderBy: "relevant",
   });
-  console.log(resp);
 
   if (resp.type === "error") {
     return {

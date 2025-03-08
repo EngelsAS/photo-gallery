@@ -29,7 +29,6 @@ const PhotoList = ({ columns, setColumnWidth }: PhotoListProps) => {
 
   useEffect(() => {
     if (columnRef.current && setColumnWidth) {
-      console.log("loop");
       setColumnWidth(columnRef.current?.offsetWidth);
     }
   }, [columns, setColumnWidth]);
